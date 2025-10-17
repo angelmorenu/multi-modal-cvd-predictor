@@ -1,6 +1,7 @@
 # Multi-Modal Predictors for Cardiovascular Disease Risk and Outcomes
 
-**Author:** Angel Morenu  
+**Author:** Angel Morenu
+**Email:** angel.morenu@ufl.edu
 **Affiliation:** University of Florida, M.S. in Applied Data Science  
 **Course:** EEE 6778 – Applied Machine Learning II (Fall 2025)
 **Instructor:** Dr. Ramirez-Salgado
