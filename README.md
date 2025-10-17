@@ -37,7 +37,7 @@ This hybrid workflow uses:
 - Streamlit for the user interface
 - Conceptual edge deployment (e.g., smartwatch scenario)
 
-![Architecture Diagram](Project/multimodal_cvd_architecture.png)
+![Architecture Diagram](docs/multimodal_cvd_architecture.svg)
 
 ---
 
@@ -77,14 +77,24 @@ streamlit run ui/app.py
 
 ## Deliverables
 
-- notebooks/ – Exploratory analysis, baseline models
-- src/ – Scripts for preprocessing, training, evaluation
-- ui/ – Streamlit demo interface
-- results/ – Logs, metrics, plots
+- data/ – Local/raw datasets (not versioned)
+- notebooks/ – EDA and setup
+    - setup.ipynb
+- src/ – Core code
+    - preprocess.py – Data preprocessing (tabular/ECG)
+    - model.py – Modeling, training, fusion
+- ui/ – Streamlit interface
+    - app.py – Main app
+    - MultiModalCVD_app.py – Alternate prototype
 - docs/ – Diagrams and documentation
-- README.md – You’re here!
-- environment.yml – Reproducible dependencies
-
+    - multimodal_cvd_architecture.png
+- results/ – Optional visualizations and metrics
+- environment.yml – CPU/MPS environment
+- environment.cuda.yml – CUDA environment
+- environment.macos.yml – macOS environment
+- README.md – Project overview and instructions
+- Morenu_Project Deliverable 1.docx – Written deliverable
+- Morenu_Angel_Deliverable1_TechnicalBlueprint.pdf – Exported PDF
 ---
 
 ## Responsible AI Goals
