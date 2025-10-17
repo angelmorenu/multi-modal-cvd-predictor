@@ -1,8 +1,10 @@
 # Multi-Modal Predictors for Cardiovascular Disease Risk and Outcomes
 
 **Author:** Angel Morenu  
-**Course:** EEE 6778 – Applied Machine Learning II (Fall 2025)  
+**Affiliation:** University of Florida, M.S. in Applied Data Science  
+**Course:** EEE 6778 – Applied Machine Learning II (Fall 2025)
 **Instructor:** Dr. Ramirez-Salgado
+
 
 ---
 
@@ -17,6 +19,16 @@ This project develops a multi-modal machine learning system that combines:
 
 to improve CVD risk prediction and make model outputs explainable, accessible, and deployable on edge devices.
 
+---
+## GitHub Repository
+
+Repository: https://github.com/angelmorenu/multi-modal-cvd-predictor
+
+Clone:
+```bash
+git clone https://github.com/angelmorenu/multi-modal-cvd-predictor.git
+cd multi-modal-cvd-predictor
+```
 ---
 
 ## Datasets Used
