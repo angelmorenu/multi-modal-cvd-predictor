@@ -1,0 +1,54 @@
+name: cvd_predictor
+channels:
+    - pytorch
+    - conda-forge
+    - defaults
+
+dependencies:
+    # Core Python
+    - python=3.10
+    - pip
+    - ipykernel
+    - jupyterlab
+    - notebook
+
+    # Data Science & ML
+    - numpy
+    - pandas
+    - scikit-learn
+    - matplotlib
+    - seaborn
+    - scipy
+
+    # Deep Learning (PyTorch)
+    - pytorch
+    - torchvision
+    - torchaudio
+
+    # Visualization & Explainability
+    - shap
+    - tqdm
+    - plotly
+
+    # Signal Processing
+    - wfdb            # for reading ECG WFDB format
+    - neurokit2       # optional ECG feature extraction
+    - ffmpeg          # torchaudio optional dep for IO
+
+    # Web App / Edge Prototype
+    - streamlit
+
+    # Environment utilities
+    - pyyaml          # YAML support (use pyyaml, not 'yaml')
+    - requests
+
+    # Pip section (for anything conda doesn’t have)
+    - pip:
+        - torchsummary
+        - gradio
+        - scikit-optimize
+        - pycm
+
+# To create this environment:
+# conda env create -f environment.yml
+# conda activate cvd_predictor

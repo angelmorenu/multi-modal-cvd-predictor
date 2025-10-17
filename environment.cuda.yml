@@ -1,0 +1,55 @@
+name: cvd_predictor
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+
+dependencies:
+  # Core Python
+  - python=3.10
+  - pip
+  - ipykernel
+  - jupyterlab
+
+  # Data Science & ML
+  - numpy
+  - pandas
+  - scikit-learn
+  - matplotlib
+  - seaborn
+  - scipy
+
+  # Deep Learning (PyTorch w/ CUDA 11.8)
+  - pytorch
+  - torchvision
+  - torchaudio
+  - pytorch-cuda=11.8
+
+  # Visualization & Explainability
+  - shap
+  - tqdm
+  - plotly
+
+  # Signal Processing
+  - wfdb
+  - neurokit2
+  - ffmpeg          # enables audio I/O for torchaudio
+
+  # Web App / Edge Prototype
+  - streamlit
+
+  # Environment utilities
+  - pyyaml
+  - requests
+
+  # Pip section (for anything conda doesn’t have or preferred from PyPI)
+  - pip:
+      - torchsummary
+      - gradio
+      - scikit-optimize
+      - pycm
+
+# Usage (Linux/Windows with NVIDIA GPU):
+#   conda env create -f environment.cuda.yml
+#   conda activate cvd_predictor

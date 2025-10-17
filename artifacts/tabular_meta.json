@@ -1,0 +1,21 @@
+{
+  "y_col": "target",
+  "num_cols": [
+    "age",
+    "height",
+    "weight",
+    "ap_hi",
+    "ap_lo",
+    "cholesterol",
+    "gluc",
+    "smoke",
+    "alco",
+    "active"
+  ],
+  "cat_cols": [
+    "gender"
+  ],
+  "n_train": 69,
+  "n_val": 10,
+  "n_test": 21
+}
