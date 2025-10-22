@@ -1,10 +1,10 @@
 # Multi-Modal Predictors for Cardiovascular Disease Risk and Outcomes
 
-**Author:** Angel Morenu
-**Email:** angel.morenu@ufl.edu
+**Author:** Angel Morenu  
+**Email:** angel.morenu@ufl.edu  
 **Affiliation:** University of Florida, M.S. in Applied Data Science  
-**Course:** EEE 6778 – Applied Machine Learning II (Fall 2025)
-**Instructor:** Dr. Ramirez-Salgado
+**Course:** EEE 6778 – Applied Machine Learning II (Fall 2025)  
+**Instructor:** Dr. Ramirez-Salgado  
 
 
 ---
@@ -83,7 +83,12 @@ jupyter notebook setup.ipynb
 
 Launch the Streamlit UI:
 ```bash
-streamlit run ui/app.py
+# Activate the conda environment
+source /opt/anaconda3/etc/profile.d/conda.sh
+conda activate cvd_predictor
+
+# Run the Streamlit app on a free port
+streamlit run ui/MultiModalCVD_app.py --server.port 8502 --server.headless true
 ```
 
 ---
