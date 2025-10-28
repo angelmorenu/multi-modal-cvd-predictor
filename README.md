@@ -5,6 +5,7 @@
 **Affiliation:** University of Florida, M.S. in Applied Data Science  
 **Course:** EEE 6778 – Applied Machine Learning II (Fall 2025)  
 **Instructor:** Dr. Ramirez-Salgado  
+ 
 
 ---
 
@@ -100,7 +101,6 @@ streamlit run ui/MultiModalCVD_app.py --server.port 8502 --server.headless true
 
 This will open a local browser window where you can input demographic features, upload an ECG signal, and view the model’s predicted risk probability.
 
----
 
 ## 📁 Repository Structure
 
@@ -124,6 +124,8 @@ multi_modal_cvd_project/
 ├── README.md                 # Project overview & instructions
 ├── Morenu_Project Deliverable 1.docx
 └── Morenu_Angel_Deliverable1_TechnicalBlueprint.pdf
+=======
+ 
 ```
 
 ---
