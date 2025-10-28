@@ -30,21 +30,28 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 
-try:
-    import joblib
-except Exception:
+# Use importlib to avoid static import errors when joblib is not installed
+import importlib
+import importlib.util
+
+_spec = importlib.util.find_spec("joblib")
+if _spec is not None:
+    joblib = importlib.import_module("joblib")
+else:
     joblib = None
     warnings.warn("joblib not found; pipeline saving/loading disabled.")
 
 # Optional ECG deps (handled gracefully)
-try:
-    import wfdb  # for reading PhysioNet/WFDB format
-except Exception:
+_wfdb_spec = importlib.util.find_spec("wfdb")
+if _wfdb_spec is not None:
+    wfdb = importlib.import_module("wfdb")
+else:
     wfdb = None
 
-try:
-    import neurokit2 as nk  # for ECG feature extraction
-except Exception:
+_nk_spec = importlib.util.find_spec("neurokit2")
+if _nk_spec is not None:
+    nk = importlib.import_module("neurokit2")
+else:
     nk = None
 
 
