@@ -124,7 +124,6 @@ multi_modal_cvd_project/
 ├── README.md                 # Project overview & instructions
 ├── Morenu_Project Deliverable 1.docx
 └── Morenu_Angel_Deliverable1_TechnicalBlueprint.pdf
-=======
  
 ```
 
