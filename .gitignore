@@ -1,2 +1,11 @@
 .DS_Store
 ._*
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+.conda/
+artifacts/
+results/*.npy
+data/processed/*
+data/ptbxl_records/*
