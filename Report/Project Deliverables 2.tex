@@ -54,30 +54,30 @@ I address this gap with a multi-modal predictive framework that integrates heter
 \end{itemize}
 I hypothesize that complementary modalities provide an additive signal for discrimination and robustness. I implement scikit-learn preprocessing \cite{pedregosa2011scikit} and PyTorch-based deep learning \cite{goodfellow2016deep} to extract ECG features via a lightweight 1D-CNN and fuse them with tabular embeddings. Since Deliverable~1, the system moved from concept to a reproducible prototype with end-to-end training, evaluation, and an interactive Streamlit demo. This report documents implementation and early results, establishing a baseline for optimization and interpretability.
 
-% --- Figure 1: two-column architecture (robust path checks including ui/) ---
+% --- Figure 1: two-column architecture (prioritize figures/multimodal_cvd_architecture.png) ---
 \begin{figure*}[!t]
     \centering
-    % Check for PDF/PNG in figures/, then ui/, then project root; fallback to message box.
-    \IfFileExists{\detokenize{figures/multimodal_cvd_architecture.pdf}}{%
-        \includegraphics[width=0.92\textwidth]{\detokenize{figures/multimodal_cvd_architecture.pdf}}%
+    % Prioritize the requested path (figures/multimodal_cvd_architecture.png), then fall back to other locations/formats.
+    \IfFileExists{\detokenize{figures/multimodal_cvd_architecture.png}}{%
+        \includegraphics[width=0.92\textwidth]{\detokenize{figures/multimodal_cvd_architecture.png}}%
     }{%
-        \IfFileExists{\detokenize{figures/multimodal_cvd_architecture.png}}{%
-            \includegraphics[width=0.92\textwidth]{\detokenize{figures/multimodal_cvd_architecture.png}}%
+        \IfFileExists{\detokenize{figures/multimodal_cvd_architecture.pdf}}{%
+            \includegraphics[width=0.92\textwidth]{\detokenize{figures/multimodal_cvd_architecture.pdf}}%
         }{%
-            \IfFileExists{\detokenize{ui/multimodal_cvd_architecture.pdf}}{%
-                \includegraphics[width=0.92\textwidth]{\detokenize{ui/multimodal_cvd_architecture.pdf}}%
+            \IfFileExists{\detokenize{ui/multimodal_cvd_architecture.png}}{%
+                \includegraphics[width=0.92\textwidth]{\detokenize{ui/multimodal_cvd_architecture.png}}%
             }{%
-                \IfFileExists{\detokenize{ui/multimodal_cvd_architecture.png}}{%
-                    \includegraphics[width=0.92\textwidth]{\detokenize{ui/multimodal_cvd_architecture.png}}%
+                \IfFileExists{\detokenize{ui/multimodal_cvd_architecture.pdf}}{%
+                    \includegraphics[width=0.92\textwidth]{\detokenize{ui/multimodal_cvd_architecture.pdf}}%
                 }{%
-                    \IfFileExists{\detokenize{multimodal_cvd_architecture.pdf}}{%
-                        \includegraphics[width=0.92\textwidth]{\detokenize{multimodal_cvd_architecture.pdf}}%
+                    \IfFileExists{\detokenize{multimodal_cvd_architecture.png}}{%
+                        \includegraphics[width=0.92\textwidth]{\detokenize{multimodal_cvd_architecture.png}}%
                     }{%
-                        \IfFileExists{\detokenize{multimodal_cvd_architecture.png}}{%
-                            \includegraphics[width=0.92\textwidth]{\detokenize{multimodal_cvd_architecture.png}}%
+                        \IfFileExists{\detokenize{multimodal_cvd_architecture.pdf}}{%
+                            \includegraphics[width=0.92\textwidth]{\detokenize{multimodal_cvd_architecture.pdf}}%
                         }{%
                             \fbox{%
-                                \parbox[b][5cm][c]{0.92\textwidth}{\centering Architecture figure not found\\(expected: figures/ or ui/ or project-root: multimodal\_cvd\_architecture.pdf/png).}%
+                                \parbox[b][5cm][c]{0.92\textwidth}{\centering Architecture figure not found\\(expected: figures/multimodal\_cvd\_architecture.png).}%
                             }%
                         }%
                     }%

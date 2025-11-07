@@ -122,9 +122,10 @@ multi_modal_cvd_project/
 ├── scripts/
 │   └── plot_confusion.py   
 |   └── ui_demo.png  
-├── figures/
-│   └── confusion_matrix.png  
-├── docs/
+│ 
+├── figures
+|   └── confusion_matrix.png 
+|   └── ui_demo.png
 │   └── multimodal_cvd_architecture.png
 ├── results/                  
 ├── environment.yml           
