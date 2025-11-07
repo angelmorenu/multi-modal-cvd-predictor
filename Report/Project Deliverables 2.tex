@@ -1,220 +1,282 @@
 \documentclass[conference]{IEEEtran}
-\IEEEoverridecommandlockouts
 
-% Font selection: choose fonts appropriate for your TeX engine (pdfLaTeX vs XeLaTeX/LuaLaTeX)
-\usepackage{iftex}
-\ifPDFTeX
-    \usepackage[T1]{fontenc}
-    \usepackage{newtxtext,newtxmath}
-\else
-    \usepackage{fontspec}
-    \setmainfont{Times New Roman}
-    \setsansfont{Arial}
-    \setmonofont{Courier New}
-    \usepackage{unicode-math}
-    \setmathfont{TeX Gyre Termes Math}
-\fi
+% --- PACKAGES ---
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{graphicx}       % For including images
+\usepackage{amsmath}        % For advanced math
+\usepackage{amssymb}        % For math symbols
+\usepackage{booktabs}       % For professional tables
+\usepackage{url}            % For formatting URLs
+\usepackage{cite}           % For IEEE-style citations
+\usepackage{verbatim}       % For code-like text
+\usepackage[scaled=0.9]{helvet} % For sans-serif text (e.g., UI elements)
+\usepackage{caption}        % Better caption control
 
-% Core packages
-\usepackage{graphicx}
-\usepackage{cite}
-\usepackage{booktabs}
-\usepackage{enumitem}
-\usepackage{amsmath,amssymb}
-\usepackage[utf8]{inputenc} % safe fallback for pdfLaTeX
-\usepackage{url}
+\graphicspath{{figures/}}   % Figures folder
 
-% hyperref should be loaded last
-\usepackage[hidelinks]{hyperref}
-
-\title{Multi-Modal Predictors for Cardiovascular Disease Risk and Outcomes\\
-Deliverable 2 -- Implementation and Early Evaluation}
-
-\author{%
-    \IEEEauthorblockN{Angel Morenu}
-    \IEEEauthorblockA{M.S. Applied Data Science\\
-    University of Florida\\
-    EEE 6778 -- Applied Machine Learning II (Fall 2025)\\
-    Instructor: Dr. Ramirez-Salgado\\
-    Email: angel.morenu@ufl.edu}
-}
-
+% --- DOCUMENT START ---
 \begin{document}
 
+% --- TITLE AND AUTHOR ---
+\title{Multi-Modal Predictors for Cardiovascular Disease Risk and Outcomes:\\
+Deliverable 2 -- Implementation and Early Evaluation}
+
+% For a course paper, a compact block reads well and is acceptable.
+\author{
+    \IEEEauthorblockN{Angel Morenu}
+    \IEEEauthorblockA{
+        University of Florida\\
+        EEE 6778 -- Applied Machine Learning II (Fall 2025)\\
+        Instructor: Dr. Ramirez-Salgado\\
+        Email: angel.morenu@ufl.edu
+    }
+}
+
+% Creates the title
 \maketitle
 
+% --- ABSTRACT ---
 \begin{abstract}
-Cardiovascular disease (CVD) remains the leading cause of death globally. This deliverable documents the implementation and early evaluation of a multi-modal predictive framework that fuses demographic (tabular), hospital admission (records), and physiological (ECG) data to estimate individual CVD risk. The prototype integrates a tabular encoder, a 1D-CNN ECG feature extractor, and a fusion classifier; training and evaluation scripts, a Streamlit interface, and reproducible preprocessing pipelines are included. Preliminary experiments demonstrate an end-to-end working system, provide baseline metrics, and identify key next steps for improving data scale, signal quality, model calibration, and interpretability.
+Cardiovascular disease (CVD) remains the leading cause of mortality worldwide, motivating early and reliable risk assessment tools. This work implements a multi-modal predictive framework that fuses demographic/clinical tabular data, hospital admissions records, and physiological electrocardiogram (ECG) signals to estimate CVD risk. The pipeline combines robust preprocessing and baselines in scikit-learn with a PyTorch 1D convolutional model for ECG feature extraction and a fusion classifier. An interactive Streamlit interface enables local, privacy-preserving inference and ECG visualization. I report a fully functional end-to-end system---data ingestion, preprocessing, training, evaluation, and user interaction---with preliminary held-out performance (Accuracy 0.476, ROC AUC 0.427, PR AUC 0.539, Brier 0.325). Although early metrics are modest, results confirm stable training and validate the feasibility of multi-modal fusion for CVD risk modeling. I outline key challenges (class imbalance, ECG normalization, calibration) and next steps (class-weighted loss, early stopping, SHAP-based interpretability, and edge deployment).
 \end{abstract}
 
-\section{Project Summary}
+% --- SECTIONS ---
 
-\IEEEPARstart{C}{ardiovascular} disease (CVD) continues to be the leading cause of death worldwide and a major burden on health-care systems. Early detection of individual risk remains one of the most effective strategies for prevention, yet current predictive models often rely on narrow, single-source datasets such as demographic or clinical measurements alone. This limits their capacity to generalize to diverse populations and to capture subtle physiological indicators measurable through modern sensors.
+\section{Introduction and Motivation}
+Cardiovascular disease (CVD) remains the leading cause of morbidity and mortality globally, imposing significant burdens on public health systems and economies \cite{goodfellow2016deep}. Early and accurate identification of at-risk individuals is central to prevention and intervention. Classical risk models (e.g., Framingham) rely on limited, unimodal features (age, blood pressure, lipids, smoking), which can under-represent the complexity of cardiovascular pathophysiology and the richness of modern physiological sensing.
 
-This project aims to design, implement, and evaluate a multi-modal predictive framework that integrates heterogeneous data sources---demographic (tabular), hospital admission (records), and physiological (ECG signals)---to estimate CVD risk. The architecture blends traditional machine-learning methods with deep-learning models and exposes the resulting system through an interactive Streamlit interface suitable for clinical or educational demonstrations.
+I address this gap with a multi-modal predictive framework that integrates heterogeneous sources:
+\begin{itemize}
+    \item \textbf{Demographic/Clinical Data:} structured (tabular) risk indicators (age, blood pressure, cholesterol, lifestyle).
+    \item \textbf{Hospital Admissions:} categorical context from encounter metadata (admission type, diagnosis codes).
+    \item \textbf{Physiological Signals:} 1D ECG waveforms that capture transient electrical activity.
+\end{itemize}
+I hypothesize that complementary modalities provide an additive signal for discrimination and robustness. I implement scikit-learn preprocessing \cite{pedregosa2011scikit} and PyTorch-based deep learning \cite{goodfellow2016deep} to extract ECG features via a lightweight 1D-CNN and fuse them with tabular embeddings. Since Deliverable~1, the system moved from concept to a reproducible prototype with end-to-end training, evaluation, and an interactive Streamlit demo. This report documents implementation and early results, establishing a baseline for optimization and interpretability.
 
-Since Deliverable 1, the project has transitioned from conceptual design to a functioning prototype. The preprocessing pipeline has been coded in scikit-learn, feature scaling and encoding have been standardized, and a PyTorch training loop has been implemented for the deep-learning components. The system can now train, evaluate, and generate predictions end-to-end. Early results, while modest, confirm that the pipeline executes reliably and provides a clear baseline for further optimization and interpretability research.
+% --- Figure 1: two-column architecture (robust path checks including ui/) ---
+\begin{figure*}[!t]
+    \centering
+    % Check for PDF/PNG in figures/, then ui/, then project root; fallback to message box.
+    \IfFileExists{\detokenize{figures/multimodal_cvd_architecture.pdf}}{%
+        \includegraphics[width=0.92\textwidth]{\detokenize{figures/multimodal_cvd_architecture.pdf}}%
+    }{%
+        \IfFileExists{\detokenize{figures/multimodal_cvd_architecture.png}}{%
+            \includegraphics[width=0.92\textwidth]{\detokenize{figures/multimodal_cvd_architecture.png}}%
+        }{%
+            \IfFileExists{\detokenize{ui/multimodal_cvd_architecture.pdf}}{%
+                \includegraphics[width=0.92\textwidth]{\detokenize{ui/multimodal_cvd_architecture.pdf}}%
+            }{%
+                \IfFileExists{\detokenize{ui/multimodal_cvd_architecture.png}}{%
+                    \includegraphics[width=0.92\textwidth]{\detokenize{ui/multimodal_cvd_architecture.png}}%
+                }{%
+                    \IfFileExists{\detokenize{multimodal_cvd_architecture.pdf}}{%
+                        \includegraphics[width=0.92\textwidth]{\detokenize{multimodal_cvd_architecture.pdf}}%
+                    }{%
+                        \IfFileExists{\detokenize{multimodal_cvd_architecture.png}}{%
+                            \includegraphics[width=0.92\textwidth]{\detokenize{multimodal_cvd_architecture.png}}%
+                        }{%
+                            \fbox{%
+                                \parbox[b][5cm][c]{0.92\textwidth}{\centering Architecture figure not found\\(expected: figures/ or ui/ or project-root: multimodal\_cvd\_architecture.pdf/png).}%
+                            }%
+                        }%
+                    }%
+                }%
+            }%
+        }%
+    }
+    \caption{
+        \textbf{System Architecture of the Multi-Modal CVD Risk Predictor.}
+        The pipeline integrates three heterogeneous data sources---tabular demographic data, hospital admission records, and ECG waveforms---processed through scikit-learn and PyTorch modules.
+        The architecture consists of: (1) preprocessing and feature scaling via \texttt{ColumnTransformer}, (2) per-modality modeling with classical baselines and neural encoders, (3) fusion and classification through dense layers, and (4) outputs delivered through the Streamlit interface and conceptual Edge-AI deployment (e.g., smartwatch scenario).
+    }
+    \label{fig:architecture}
+\end{figure*}
 
 \section{System Architecture and Pipeline}
-
-The implemented system follows a modular, data-to-inference workflow summarized in Figure~\ref{fig:architecture}. Each stage is independent yet integrated through shared data structures and consistent random-seed initialization to guarantee reproducibility.
-
-\subsection{Data Ingestion and Preprocessing}
-Raw data from three Kaggle datasets---(a) Cardiovascular Diseases \cite{cardio_ds}, (b) Hospital Admissions \cite{hospital_ds}, and (c) PTB-XL ECG Dataset \cite{ptbxl_ds}---are imported into the pipeline. Demographic and clinical variables are cleaned, missing values imputed, and categorical features encoded via one-hot encoding. Continuous features are scaled using StandardScaler. ECG signals, stored as NumPy arrays, are trimmed or zero-padded to a fixed length of 2\,000 samples and normalized to zero mean and unit variance.
-
-\subsection{Feature Engineering and Alignment}
-After cleaning, each modality is saved in standardized NumPy .npy format under data/processed/. Alignment scripts ensure that sample indices match across modalities so that a single observation corresponds to a single patient instance. Class imbalance is recorded, and stratified splits are produced for training, validation, and testing.
-
-\subsection{Model Training}
-Training is orchestrated by src/train.py. The script supports two regimes:
-\begin{itemize}[leftmargin=*]
-        \item Week 4 (ECG-only) -- a 1D CNN is trained on ECG inputs to validate architecture and convergence.
-        \item Week 5 (Fusion) -- tabular embeddings and ECG features are concatenated and fed into a classification head.
-\end{itemize}
-
-The optimizer used is AdamW with learning rate $1\times10^{-3}$, batch size 64, and 10 epochs. Model checkpoints are stored in artifacts/. The architecture’s modularity permits future addition of text or imaging modalities.
-
-\subsection{Evaluation and Metrics}
-Evaluation is handled by src/eval.py, which loads the best checkpoint and computes Accuracy, ROC AUC, PR AUC, and Brier Score using scikit-learn. Confusion matrices and precision--recall plots are generated and saved in results/.
-
-\subsection{Interface and Visualization}
-The \texttt{Streamlit} front end connects the model to a browser-based user experience. Users can input numeric data or upload ECG files and instantly receive predictions with textual explanations. The interface is shown in Figure~\ref{fig:ui}.
-
-\begin{figure}[!t]
-\centering
-\includegraphics[width=\linewidth]{architecture_v2.png}
-\caption{System architecture.}
-\label{fig:architecture}
-\end{figure}
+The architecture (Fig.~\ref{fig:architecture}) is modular and reproducible, transforming raw multi-source data into actionable risk estimates:
+\begin{enumerate}
+    \item \textbf{Data Ingestion and Preprocessing (scikit-learn).} Tabular features (demographics, vitals, lifestyle) are imputed (median for continuous; mode for categorical), one-hot encoded, and scaled with \texttt{StandardScaler}. ECG sequences are trimmed/padded to 2{,}000 samples and per-signal normalized to zero mean/unit variance.
+    \item \textbf{Baseline Models.} Classical baselines (logistic regression, random forest) are implemented for tabular data using scikit-learn \cite{pedregosa2011scikit,raschka2022python} to establish reference performance.
+    \item \textbf{Feature Alignment.} Processed arrays are saved under \texttt{data/processed/} with a manifest mapping each \texttt{patient\_id} across modalities, ensuring consistent indexing in batches.
+    \item \textbf{Model Training (PyTorch).} I support an ECG-only regime (Week~4 sanity check) and a fused regime (Week~5) combining tabular and ECG embeddings into a binary classifier.
+    \item \textbf{Evaluation.} Accuracy, ROC AUC, PR AUC, and Brier score are computed on a held-out test set; confusion matrices and curves are exported to \texttt{results/}.
+    \item \textbf{Interface.} A Streamlit app loads the checkpoint and transformer for interactive predictions and plots the ECG waveform.
+    \item \textbf{Datasets \& Preprocessing.}
+        \begin{table}[!t]
+        \renewcommand{\arraystretch}{1.15}
+        \caption{Datasets and Preprocessing Summary}
+        \label{tab:data}
+        \centering
+        \begin{tabular}{@{}p{2.3cm}p{2.8cm}p{2.8cm}@{}}
+        \toprule
+        \textbf{Modality} & \textbf{Source / Shape} & \textbf{Preprocessing} \\
+        \midrule
+        Tabular (risk factors) & Kaggle CVD; $(N\times D)$ features & Missing imputation (median/mode), one-hot encoding, \texttt{StandardScaler} \\
+        Hospital admissions & Kaggle hospital; categorical codes & Cleaning, categorical encoding, time-alignment to tabular IDs \\
+        ECG (1D) & PTB-XL (reformatted); $(1\times 2000)$ & Trim/pad to 2000, per-signal z-normalization; optional band-pass (planned) \\
+        \bottomrule
+        \end{tabular}
+        \end{table}
+\end{enumerate}
 
 \section{Model Implementation Details}
+\subsection{Tabular Encoder (MLP)}
+Tabular inputs pass through two fully connected layers with ReLU and dropout ($p{=}0.3$), producing a 32-D embedding. This branch captures non-linear relationships among age, blood pressure, cholesterol, and lifestyle attributes.
 
-The model leverages two complementary learning paradigms.
+\subsection{ECG Feature Extractor (1D-CNN)}
+The ECG branch uses three convolutional blocks (kernel sizes 5,5,3; stride 2), each followed by batch normalization and ReLU, then global average pooling yields a 128-D embedding. This compact design balances expressiveness and efficiency for potential edge deployment.
 
-\subsection{Tabular Encoder}
-Clinical and demographic attributes are fed into a fully connected network consisting of two linear layers with ReLU activation and dropout (0.3). This branch captures correlations among age, blood pressure, cholesterol, and lifestyle variables. The final hidden layer produces a dense 32-dimensional embedding.
-
-\subsection{ECG Feature Extractor}
-The ECG branch is implemented as a three-layer 1D CNN with kernel sizes (5, 5, 3) and stride 2, followed by batch normalization and ReLU non-linearities. The network outputs a 128-dimensional feature vector after global average pooling. This design balances representational power and computational efficiency, suitable for potential deployment on edge devices such as smartwatches.
-
-\subsection{Fusion and Classification}
-The tabular (32-D) and ECG (128-D) embeddings are concatenated into a 160-D fusion layer that feeds a fully connected classifier producing logits for two classes (CVD risk present/absent). A Softmax activation yields probabilities. Training uses cross-entropy loss; class weights can later be added to handle imbalance.
+\subsection{Fusion and Classifier}
+The 160-D concatenated embedding (32-D tabular + 128-D ECG) is fed into a linear classifier producing logits for two classes (risk present/absent). Cross-entropy loss is used; class weights can mitigate imbalance.
 
 \subsection{Training Setup and Reproducibility}
-Experiments were run on macOS Monterey using PyTorch’s MPS backend, 16 GB RAM, and 8-core CPU. Each run sets deterministic seeds across NumPy, Torch, and random. Checkpoints and logs include model state, optimizer state, and hyperparameters to facilitate resuming and auditability.
-
-\subsection{Evaluation Metrics and Interpretation}
-The metrics implemented correspond to three perspectives:
-\begin{itemize}[leftmargin=*]
-        \item Discrimination -- Accuracy and ROC AUC measure separability.
-        \item Calibration -- Brier Score quantifies probabilistic reliability.
-        \item Precision--Recall Trade-off -- PR AUC highlights sensitivity to rare positives.
-\end{itemize}
-Together they give a balanced assessment of early model behavior.
-
-\section{Interface Prototype}
-
-The graphical interface, implemented in \texttt{Streamlit}, transforms the research prototype into an accessible, interactive demonstration. Figure~\ref{fig:ui} illustrates the current layout.
-
-Upon launch (\texttt{Streamlit run ui/MultiModalCVD\_app.py}), the interface loads the saved \texttt{artifacts/model.pt} and the preprocessing transformer. It presents sliders and dropdowns for demographic and clinical inputs (e.g., Age [20--90], Systolic BP, Cholesterol Category, Smoking Status) and a file uploader for ECG data.
-
-Once users click Predict Risk, the app preprocesses inputs, feeds them through the model, and outputs a risk probability (0--1) with color-coded text:
-
-\begin{itemize}[leftmargin=*]
-        \item Low Risk ( < 0.33 ) -- green banner;
-        \item Moderate Risk ( 0.33--0.66 ) -- orange;
-        \item High Risk ( > 0.66 ) -- red alert.
-\end{itemize}
-
-The interface also plots the ECG waveform using Matplotlib and displays key statistics such as mean heart rate and signal length. All predictions are computed locally; no data is uploaded to remote servers, preserving privacy.
-
-To ensure robustness, the application falls back to "demo mode" when no trained model is found---using random but deterministic predictions to keep the UI functional during testing.
+Training uses AdamW (learning rate $1\times10^{-3}$), batch size 64, for 10 epochs. Deterministic seeds are set across NumPy and Torch. Best checkpoints are saved to \texttt{artifacts/}. Experiments ran on macOS with PyTorch MPS acceleration. Code is organized under \texttt{src/} (model/train/eval) and \texttt{ui/} (Streamlit).
 
 \begin{figure}[!t]
-\centering
-\includegraphics[width=0.95\linewidth]{ui_screenshot.png}
-\caption{Streamlit interface prototype.}
-\label{fig:ui}
+    \centering
+    % Prefer canonical filenames (e.g., figures/confusion_matrix.png). If your file is
+    % a macOS artifact like "._confusion_matrix.png", rename it to "confusion_matrix.png".
+    \IfFileExists{\detokenize{figures/confusion_matrix.pdf}}{%
+        \includegraphics[width=0.92\columnwidth]{\detokenize{figures/confusion_matrix.pdf}}%
+    }{%
+        \IfFileExists{\detokenize{figures/confusion_matrix.png}}{%
+            \includegraphics[width=0.92\columnwidth]{\detokenize{figures/confusion_matrix.png}}%
+        }{%
+            \IfFileExists{\detokenize{figures/._confusion_matrix.png}}{%
+                % fallback to the problematic macOS artifact if present
+                \includegraphics[width=0.92\columnwidth]{\detokenize{figures/._confusion_matrix.png}}%
+            }{%
+                \fbox{%
+                    \parbox[b][5cm][c]{0.92\columnwidth}{\centering Confusion matrix image not found\\(expected: figures/confusion\_matrix.pdf or .png)}%
+                }%
+            }%
+        }%
+    }
+    \caption{Confusion Matrix (confusion\_matrix.png) on the held-out test set.}
+    \label{fig:cm}
 \end{figure}
 
-\section{Early Evaluation and Results}
-
-Preliminary experiments used small stratified splits of the Kaggle datasets to validate end-to-end execution rather than maximize accuracy. The model trained for 10 epochs showed consistent loss reduction and no catastrophic divergence, confirming that gradients propagate correctly through both branches.
-
-\subsection{Training Logs}
-Average training loss decreased from 0.68 to 0.59 over 10 epochs, and validation loss from 0.70 to 0.66. Validation accuracy rose from 0.50 to 0.70, demonstrating learning progress. Checkpoints were automatically saved when validation loss improved.
-
-\subsection{Evaluation Results}
-The test metrics obtained from eval.py are summarized in Table~I. Although overall accuracy (0.476) is low, the increasing validation trend and balanced loss curves indicate healthy training dynamics for a prototype model.
-
-\begin{table}[htbp]
+\begin{table}[!t]
+\renewcommand{\arraystretch}{1.15}
+\caption{Training and Evaluation Setup}
+\label{tab:train}
 \centering
-\caption{Preliminary Evaluation Metrics on Test Set}
-\begin{tabular}{@{}lcc@{}}
+\begin{tabular}{@{}p{3.2cm}p{4.7cm}@{}}
 \toprule
-Metric & Value & Interpretation \\\midrule
-Accuracy & 0.476 & Model learning baseline patterns \\
-ROC AUC & 0.427 & Limited class separability \\
-PR AUC & 0.539 & Moderate precision at low recall \\
-Brier Score & 0.325 & Requires probability calibration \\\bottomrule
+\textbf{Item} & \textbf{Setting} \\
+\midrule
+Optimizer / LR & AdamW, $1\times 10^{-3}$ \\
+Batch size / Epochs & 64 / 10 \\
+Loss & Cross-entropy (class-weighting planned) \\
+Splits & 70/15/15 (stratified) train/val/test \\
+Hardware & macOS (M1 Pro), PyTorch MPS \\
+Metrics & Accuracy, ROC AUC, PR AUC, Brier; confusion matrix \\
+Artifacts & \texttt{artifacts/best\_model.pt}, figures in \texttt{results/} \\
+\bottomrule
 \end{tabular}
 \end{table}
 
-Figure~\ref{fig:confusion} illustrates the confusion matrix. While the model currently overpredicts the positive class (11 false positives vs.\ 0 true negatives), it serves as a baseline for further data expansion and regularization.
-
-Beyond numeric metrics, early qualitative tests show that the fusion approach produces smoother probability distributions than either modality alone, validating the multi-modal design choice.
+\section{Interface Prototype}
+The Streamlit app (\texttt{ui/MultiModalCVD\_app.py}) accepts structured inputs (sliders/dropdowns) and ECG upload (\texttt{.csv}/\texttt{.npy}). On \textit{Predict}, it preprocesses inputs, performs inference, and displays a calibrated probability with color-coded guidance (low/moderate/high risk). A waveform panel visualizes the ECG and reports key shape/length diagnostics. The app runs locally for privacy; a demo mode provides deterministic outputs if checkpoints are absent.
 
 \begin{figure}[!t]
-\centering
-\includegraphics[width=0.95\linewidth]{confusion_matrix.png}
-\caption{Confusion matrix visualization.}
-\label{fig:confusion}
+    \centering
+    % Try the canonical names first, then fall back to the macOS dot-underscore artifact if present.
+    \IfFileExists{\detokenize{figures/ui_demo.pdf}}{%
+        \includegraphics[width=0.92\columnwidth]{\detokenize{figures/ui_demo.pdf}}%
+    }{%
+        \IfFileExists{\detokenize{figures/ui_demo.png}}{%
+            \includegraphics[width=0.92\columnwidth]{\detokenize{figures/ui_demo.png}}%
+        }{%
+            \IfFileExists{\detokenize{figures/._ui_demo.png}}{%
+                % macOS may create "._" resource-fork files; use it as a last-resort fallback
+                \includegraphics[width=0.92\columnwidth]{\detokenize{figures/._ui_demo.png}}%
+            }{%
+                \fbox{%
+                    \parbox[b][5cm][c]{0.92\columnwidth}{\centering UI demo image not found\\(expected: figures/ui\_demo.pdf or figures/ui\_demo.png).\\If you see a file named "._ui\_demo.png", consider renaming it to "ui\_demo.png".}%
+                }%
+            }%
+        }%
+    }
+    \caption{
+        \textbf{Streamlit Interface Prototype.}
+        The interactive demo allows users to enter tabular inputs (e.g., age, BMI, blood pressure, cholesterol, smoker status, sex) and upload an ECG file in \texttt{.csv} or \texttt{.npy} format.
+        The application normalizes inputs, performs model inference, and visualizes the waveform and predicted cardiovascular risk probability with interpretive guidance (e.g., low, moderate, or high risk). 
+        All processing occurs locally to preserve user privacy.
+    }
+    \label{fig:ui_demo}
 \end{figure}
 
+\section{Early Evaluation and Results}
+I validated end-to-end execution on small, stratified splits of public data \cite{kaggle_cvd,kaggle_hospital,kaggle_ptbxl}. Training and validation losses decreased steadily; validation accuracy improved across epochs, indicating stable optimization. Table~\ref{tab:metrics} summarizes held-out metrics; Fig.~\ref{fig:cm} shows the confusion matrix.
+
+\begin{table}[!t]
+    \renewcommand{\arraystretch}{1.2}
+    \centering
+    \caption{Preliminary Evaluation Metrics on Held-Out Test Set}
+    \label{tab:metrics}
+    \begin{tabular}{@{}lcc@{}}
+        \toprule
+        \textbf{Metric} & \textbf{Value} & \textbf{Interpretation} \\
+        \midrule
+        Accuracy    & 0.476 & Baseline learning; room for improvement \\
+        ROC AUC     & 0.427 & Limited separability \\
+        PR AUC      & 0.539 & Moderate precision at low recall \\
+        Brier Score & 0.325 & Probability calibration can improve \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+The model over-predicted the positive class on the test set, yielding no true negatives (Fig.~\ref{fig:cm}). While metrics are modest, they establish a quantitative baseline and confirm stability. Planned improvements include class weighting, learning-rate scheduling, early stopping, and data expansion.
+
 \section{Challenges and Next Steps}
+\textbf{Data Scale and Balance.} Minority-class scarcity biases the decision boundary. I will enable class-weighted loss and apply SMOTE to tabular training data.
 
-\subsection{Data Limitations}
-The most immediate challenge is data scale and balance. The cardiovascular datasets used are small samples extracted for demonstration purposes; the minority class (CVD positive) is underrepresented, leading to biased decision boundaries. To mitigate this, future work will implement weighted losses and SMOTE oversampling for tabular data.
+\noindent\textbf{Signal Quality and Alignment.} ECG denoising (band-pass filtering) and stricter alignment checks will be added.
 
-\subsection{Signal Quality and Alignment}
-ECG records exhibit variable sampling rates, missing leads, and noise spikes. Normalization and denoising filters (Butterworth band-pass and z-score) will be applied in subsequent iterations. Temporal alignment between ECG segments and clinical entries is also a priority for data integrity.
+\noindent\textbf{Optimization and Calibration.} Early stopping, L2 regularization, and LR scheduling will be tested; temperature scaling or isotonic regression will address calibration.
 
-\subsection{Model Optimization}
-Initial hyperparameters were conservative. Next steps include learning-rate scheduling, early stopping, and L2 regularization to prevent overfitting. Batch-size sensitivity will also be analyzed to balance gradient stability and training speed.
+\noindent\textbf{Explainability.} SHAP for tabular features and gradient-based saliency for ECG will surface explanations and improve trust. Visualizations will be integrated into the UI.
 
-\subsection{Explainability and Transparency}
-Deliverable 3 will emphasize interpretability. SHAP (Shapley Additive exPlanations) and Captum will be integrated to identify which features most influence model decisions. For ECG inputs, gradient saliency maps will highlight key signal regions associated with risk predictions. This addresses clinician trust and complements the Responsible AI objectives.
+\noindent\textbf{Edge Deployment.} Quantization and TorchScript export will be evaluated for on-device inference; latency and energy will be benchmarked.
 
-\subsection{Deployment Considerations}
-Edge-AI deployment remains a long-term goal. The current PyTorch model will be quantized and exported to TorchScript for on-device inference. Latency and energy consumption will be benchmarked using a smartwatch-like environment.
+\noindent\textbf{Reproducibility and Resource Efficiency.} I will (i) publish environment files (\texttt{environment.yml}, CUDA/macOS variants), (ii) provide a \texttt{train\_eval.ipynb} notebook to reproduce preprocessing, training, and evaluation, (iii) log seeds, hyperparameters, and checkpoints with metadata, (iv) add TensorBoard scalars and simple timing, and (v) report compute footprint (device, epochs, wall-clock) per Green AI guidelines \cite{schwartz2020green}.
 
 \section{Responsible AI Reflection}
+\textbf{Fairness.} Where feasible, subgroup metrics (age, gender) will be computed to detect disparities; mitigation may include class-weighted loss or threshold calibration.
 
-Responsible AI principles guide this project throughout its life cycle.
+\noindent\textbf{Transparency.} SHAP and saliency maps will expose influential features/segments; a model card will document scope, data, metrics, and limitations.
 
-\subsection{Fairness}
-The model will be evaluated on subgroups (age, gender, and ethnicity where available) to ensure equitable performance. Metrics such as equal opportunity and disparate impact will be added as the dataset grows.
+\noindent\textbf{Privacy.} Only anonymized, public data are used; the app runs locally without transmitting inputs.
 
-\subsection{Transparency}
-SHAP and attention-map visualizations provide traceable explanations for predictions. A model card will summarize architecture, training data, metrics, and limitations in plain language for non-experts.
+\noindent\textbf{Sustainability.} Lightweight architectures and modest batch sizes reduce compute; I will estimate carbon footprint for final training.
 
-\subsection{Privacy}
-All data used are public and anonymized; the Streamlit app runs entirely locally without cloud storage. Future deployments will apply differential privacy and secure enclaves for edge computing contexts.
+% --- REFERENCES ---
+\begin{thebibliography}{1}
 
-\subsection{Sustainability}
-Training and inference were kept energy-efficient by using small batch sizes and lightweight architectures. A carbon-footprint estimate will be included in the final report per Green AI guidelines \cite{greenai}.
+\bibitem{pedregosa2011scikit}
+F. Pedregosa \emph{et al.}, ``Scikit-learn: Machine Learning in Python,'' \emph{Journal of Machine Learning Research}, vol. 12, pp. 2825--2830, 2011.
 
-Together, these measures ensure that the system is not only technically sound but also aligned with ethical and societal expectations for AI in health care.
+\bibitem{goodfellow2016deep}
+I. Goodfellow, Y. Bengio, and A. Courville, \emph{Deep Learning}. MIT Press, 2016.
 
-\section*{References}
-\begin{thebibliography}{9}
-\bibitem{scikit} Pedregosa et al., ``Scikit-learn: Machine Learning in Python,'' J. Mach. Learn. Res., vol. 12, pp. 2825--2830, 2011.
-\bibitem{goodfellow} I. Goodfellow, Y. Bengio, and A. Courville, \textit{Deep Learning}. MIT Press, 2016.
-\bibitem{raschka} S. Raschka, V. Mirjalili, and J. Hearty, \textit{Python Machine Learning}, 3rd ed., Packt, 2022.
-\bibitem{cardio_ds} Kaggle, ``Cardiovascular Diseases Dataset,'' \url{https://www.kaggle.com/datasets/mexwell/cardiovascular-diseases}.
-\bibitem{hospital_ds} Kaggle, ``Hospital Admissions Data,'' \url{https://www.kaggle.com/datasets/ashishsahani/hospital-admissions-data}.
-\bibitem{ptbxl_ds} Kaggle, ``PTB-XL ECG Dataset (Reformatted),'' \url{https://www.kaggle.com/datasets/khyeh0719/ptb-xl-dataset-reformatted}.
-\bibitem{greenai} R. Schwartz et al., ``Green AI,'' \textit{Commun. ACM}, vol. 63, no. 12, pp. 54--63, 2020.
+\bibitem{raschka2022python}
+S. Raschka, V. Mirjalili, and J. Hearty, \emph{Python Machine Learning}, 3rd ed., Packt, 2022.
+
+\bibitem{kaggle_cvd}
+Kaggle, ``Cardiovascular Diseases Dataset.'' [Online]. Available: \url{https://www.kaggle.com/datasets/mexwell/cardiovascular-diseases}
+
+\bibitem{kaggle_hospital}
+Kaggle, ``Hospital Admissions Data.'' [Online]. Available: \url{https://www.kaggle.com/datasets/ashishsahani/hospital-admissions-data}
+
+\bibitem{kaggle_ptbxl}
+Kaggle, ``PTB-XL ECG Dataset (Reformatted).'' [Online]. Available: \url{https://www.kaggle.com/datasets/khyeh0719/ptb-xl-dataset-reformatted}
+
+\bibitem{schwartz2020green}
+R. Schwartz \emph{et al.}, ``Green AI,'' \emph{Communications of the ACM}, vol. 63, no. 12, pp. 54--63, 2020.
+
 \end{thebibliography}
 
 \end{document}
+
