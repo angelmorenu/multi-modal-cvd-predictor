@@ -1,62 +1,63 @@
-# Multi-Modal Predictors for Cardiovascular Disease Risk and Outcomes
+# 🩺 Multi-Modal Predictors for Cardiovascular Disease Risk and Outcomes
 
 **Author:** Angel Morenu  
 **Email:** angel.morenu@ufl.edu  
 **Affiliation:** University of Florida, M.S. in Applied Data Science  
 **Course:** EEE 6778 – Applied Machine Learning II (Fall 2025)  
-**Instructor:** Dr. Ramirez-Salgado  
+**Instructor:** Dr. Ramirez-Salgado
 
+---
+
+## 🧠 Project Overview
+
+Cardiovascular disease (CVD) remains the leading global cause of death. This project develops a multi-modal machine learning system that fuses:
+
+- Tabular demographic data  
+- Hospital admission records  
+- Physiological 12‑lead ECG signals
+
+The goal is improved CVD risk prediction with explainability and edge-deployable inference.
 
 ---
 
-## Project Overview
-
-Cardiovascular disease (CVD) remains the leading global cause of death. Existing predictive models often rely on a single data modality, limiting their accuracy and applicability in real-world settings.
-
-This project develops a multi-modal machine learning system that combines:
-- Tabular demographic data
-- Hospital admission records
-- Physiological ECG signals
-
-to improve CVD risk prediction and make model outputs explainable, accessible, and deployable on edge devices.
-
----
-## GitHub Repository
+## 📦 GitHub Repository
 
 Repository: https://github.com/angelmorenu/multi-modal-cvd-predictor
 
-Clone:
+Clone and navigate:
 ```bash
 git clone https://github.com/angelmorenu/multi-modal-cvd-predictor.git
 cd multi-modal-cvd-predictor
 ```
+
 ---
 
-## Datasets Used
+## 📊 Datasets Used
 
 | Dataset | Description | Link |
-|--------|-------------|------|
-| Cardiovascular Diseases | Demographics and lifestyle features | [View on Kaggle](https://www.kaggle.com/datasets/mexwell/cardiovascular-diseases) |
-| Hospital Admissions | Clinical visit and diagnostic records | [View on Kaggle](https://www.kaggle.com/datasets/ashishsahani/hospital-admissions-data) |
-| PTB-XL ECG | 12-lead ECG signals and annotations | [View on Kaggle](https://www.kaggle.com/datasets/khyeh0719/ptb-xl-dataset-reformatted) |
+|---|---:|---|
+| Cardiovascular Diseases | Demographics and lifestyle features | https://www.kaggle.com/datasets/mexwell/cardiovascular-diseases |
+| Hospital Admissions | Clinical visit and diagnostic records | https://www.kaggle.com/datasets/ashishsahani/hospital-admissions-data |
+| PTB-XL ECG | 12-lead ECG signals and annotations | https://www.kaggle.com/datasets/khyeh0719/ptb-xl-dataset-reformatted |
 
 ---
 
-## Project Architecture
+## 🏗️ Project Architecture
 
 This hybrid workflow uses:
-- scikit-learn for preprocessing and tabular baselines
-- PyTorch for ECG deep learning and feature fusion
-- Streamlit for the user interface
-- Conceptual edge deployment (e.g., smartwatch scenario)
+- scikit-learn for preprocessing and tabular baselines  
+- PyTorch for ECG deep learning and feature fusion  
+- Streamlit for the user interface  
+- Conceptual Edge AI deployment (e.g., smartwatch scenario)
 
-![Architecture Diagram](docs/multimodal_cvd_architecture.svg)
+![Architecture Diagram](docs/multimodal_cvd_architecture.png)
 
 ---
 
-## Environment Setup
+## ⚙️ Installation and Environment Setup
 
-Install with conda (choose your platform file):
+Install with conda (choose the appropriate platform file):
+
 ```bash
 # macOS (Intel or Apple Silicon M1/M2/M3; uses CPU/MPS)
 conda env create -f environment.macos.yml
@@ -68,61 +69,124 @@ conda activate cvd_predictor
 ```
 
 Notes:
-- On Apple Silicon, PyTorch uses the MPS backend automatically when available; the notebook prints the selected device.
-- If you prefer a single cross-platform file, `environment.yml` is CPU/MPS-friendly (no CUDA packages) and should work on macOS/Intel/Linux.
-- If you run into slow dependency solving, consider using mamba.
+- On Apple Silicon, PyTorch uses the MPS backend when available.
+- The default environment.yml is cross-platform (CPU/MPS-friendly).
+- If conda dependency resolution is slow, install mamba:
+```bash
+conda install -c conda-forge mamba
+```
 
 ---
 
-## Run the Project
+## 🚀 Running the Project
 
-Run setup and EDA:
+1. Run the setup and EDA notebook:
 ```bash
-jupyter notebook setup.ipynb
+jupyter notebook notebooks/setup.ipynb
 ```
 
-Launch the Streamlit UI:
+2. Launch the Streamlit UI:
 ```bash
 # Activate the conda environment
 source /opt/anaconda3/etc/profile.d/conda.sh
 conda activate cvd_predictor
 
-# Run the Streamlit app on a free port
+# Run the Streamlit app
 streamlit run ui/MultiModalCVD_app.py --server.port 8502 --server.headless true
+```
+This opens a local UI to input demographics, upload an ECG, and view predicted risk.
+
+  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8502
+  Network URL: http://192.168.1.72:8502
+  External URL: http://104.4.123.52:8502
+
+---
+
+## 📁 Repository Structure
+
+```
+multi_modal_cvd_project/
+├── data/                     
+├── notebooks/
+│   ├── setup.ipynb           
+│   └── train_eval.ipynb      
+├── src/
+│   ├── preprocess.py         
+│   ├── model.py              
+│   └── train.py, eval.py     
+├── ui/
+│   ├── app.py                
+│   └── MultiModalCVD_app.py  
+├── scripts/
+│   └── plot_confusion.py   
+|   └── ui_demo.png  
+├── figures/
+│   └── confusion_matrix.png  
+├── docs/
+│   └── multimodal_cvd_architecture.png
+├── results/                  
+├── environment.yml           
+├── environment.cuda.yml      
+├── environment.macos.yml     
+├── README.md                 
+├── Morenu_Project Deliverable 1.docx
+└── Morenu_Deliverable2_IEEE_Report.pdf
 ```
 
 ---
 
-## Deliverables
+## 📦 Deliverables
 
-- data/ – Local/raw datasets (not versioned)
-- notebooks/ – EDA and setup
-    - setup.ipynb
-- src/ – Core code
-    - preprocess.py – Data preprocessing (tabular/ECG)
-    - model.py – Modeling, training, fusion
-- ui/ – Streamlit interface
-    - app.py – Main app
-    - MultiModalCVD_app.py – Alternate prototype
-- docs/ – Diagrams and documentation
-    - multimodal_cvd_architecture.png
-- results/ – Optional visualizations and metrics
-- environment.yml – CPU/MPS environment
-- environment.cuda.yml – CUDA environment
-- environment.macos.yml – macOS environment
-- README.md – Project overview and instructions
-- Morenu_Project Deliverable 1.docx – Written deliverable
-- Morenu_Angel_Deliverable1_TechnicalBlueprint.pdf – Exported PDF
----
-
-## Responsible AI Goals
-
-- Fairness: Evaluate across age/gender/race subgroups
-- Transparency: Use SHAP + attention maps
-- Efficiency: Support lightweight edge deployment
+- Complete project repository (code + documentation)  
+- Jupyter notebooks for setup and evaluation (setup.ipynb, train_eval.ipynb)  
+- Streamlit application (ui/app.py and MultiModalCVD_app.py)  
+- Technical IEEE report (Deliverable 2, PDF)  
+- Environment YAML files for reproducibility
 
 ---
 
-## Contact
+## ✅ Reproducibility Instructions
 
-For questions, reach out via GitHub or university email.
+To reproduce Deliverable 2 results:
+
+1. Run the evaluation notebook:
+```bash
+jupyter notebook notebooks/train_eval.ipynb
+```
+This trains/evaluates models and saves predictions to:
+```bash
+results/y_true.npy
+results/y_pred.npy
+results/y_prob.npy
+```
+
+2. Generate the confusion-matrix figure:
+```bash
+python scripts/plot_confusion.py
+```
+Output saved to:
+```bash
+figures/confusion_matrix.png
+```
+
+---
+
+## 🤖 Responsible AI Goals
+
+- Fairness: Evaluate across age, gender, and race subgroups.  
+- Transparency: Incorporate SHAP and saliency-based explanations.  
+- Efficiency: Support lightweight edge deployment for on-device inference.  
+- Reproducibility: Publish code, environment files, and metrics.
+
+---
+
+## 👤 Author & Contact
+
+Angel Morenu  
+University of Florida – M.S. in Applied Data Science  
+angel.morenu@ufl.edu  
+GitHub: https://github.com/angelmorenu/multi-modal-cvd-predictor
+
+This repository accompanies Deliverable 2 of EEE 6778 – Applied Machine Learning II (Fall 2025).

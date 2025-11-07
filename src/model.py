@@ -2,6 +2,8 @@ from __future__ import annotations
 import os
 from typing import Optional, Union, Dict, Any
 import torch
+import torch.nn as nn
+import torch.nn.functional as F
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -15,11 +17,6 @@ Model definitions for the Multi-Modal CVD project.
 Author: Angel Morenu
 Course: EEE 6778 – Applied Machine Learning II (Fall 2025)
 """
-
-
-import torch.nn as nn
-import torch.nn.functional as F
-
 
 # -------------------------
 #   ECG Feature Extractor
