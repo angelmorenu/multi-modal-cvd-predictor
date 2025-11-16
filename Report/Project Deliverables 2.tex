@@ -214,16 +214,17 @@ I validated end-to-end execution on small, stratified splits of public data \cit
 \begin{table}[!t]
     \renewcommand{\arraystretch}{1.2}
     \centering
-    \caption{Preliminary Evaluation Metrics on Held-Out Test Set}
+    \caption{Comparison of held-out evaluation metrics for unimodal (Tabular, ECG) and fused (Fusion) models.}
     \label{tab:metrics}
-    \begin{tabular}{@{}lcc@{}}
-        \toprule
-        \textbf{Metric} & \textbf{Value} & \textbf{Interpretation} \\
+    \begin{tabular}{@{}lccc@{}}
+        	oprule
+        	extbf{Metric} & \textbf{Tabular} & \textbf{ECG} & \textbf{Fusion} \\
         \midrule
-        Accuracy    & 0.476 & Baseline learning; room for improvement \\
-        ROC AUC     & 0.427 & Limited separability \\
-        PR AUC      & 0.539 & Moderate precision at low recall \\
-        Brier Score & 0.325 & Probability calibration can improve \\
+        Accuracy    & 0.571 & 0.571 & 0.571 \\
+        ROC AUC     & 0.545 & 0.545 & 0.545 \\
+        F1 Score    & 0.667 & 0.667 & 0.667 \\
+        Sensitivity & 0.900 & 0.900 & 0.900 \\
+        Specificity & 0.273 & 0.273 & 0.273 \\
         \bottomrule
     \end{tabular}
 \end{table}

@@ -1,0 +1,2 @@
+*.ipynb filter=nbstripout
+.ipynb_checkpoints export-ignore

@@ -8,6 +8,9 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import torch
 from torch import nn
+import json
+from datetime import datetime
+from pathlib import Path
 
 # Try to load sklearn transformer
 try:
@@ -197,4 +200,58 @@ if st.button("Predict Risk"):
     else:
         st.success("Low risk — keep monitoring.")
 
+    # --- Logging (append JSONL) ---
+    log_entry = {
+        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "inputs": {
+            "age": int(age),
+            "systolic": int(systolic),
+            "cholesterol": int(cholesterol),
+            "bmi": float(bmi),
+            "smoker": bool(smoker == "Yes"),
+            "sex": str(sex),
+            "uploaded_ecg": uploaded.name if uploaded is not None else None,
+        },
+        "model": {
+            "model_path_exists": os.path.exists(MODEL_PATH),
+            "transformer_present": transformer is not None,
+        },
+        "prediction": {
+            "risk_prob": float(risk_prob)
+        }
+    }
+    append_log(log_entry)
+
+    # --- Explanations panel ---
+    with st.expander("Explanations and interpretability (if available)"):
+        show_explanations()
+
 st.caption("Demo mode: if no trained model/transformer is found, predictions are illustrative only.")
+
+LOG_PATH = Path("results") / "predictions_log.jsonl"
+LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+
+# Helper: append a json line to results/predictions_log.jsonl
+def append_log(entry: dict):
+    try:
+        with open(LOG_PATH, "a", encoding="utf-8") as f:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    except Exception as e:
+        st.warning(f"Failed to write prediction log: {e}")
+
+# Helper: try to show explanation images if present
+def show_explanations():
+    # SHAP and ECG saliency images are saved under figures/
+    shap_path = Path("figures") / "shap_force_example.png"
+    saliency_path = Path("figures") / "ecg_saliency.png"
+    shown = False
+    if shap_path.exists():
+        st.subheader("Tabular feature explanation (SHAP)")
+        st.image(str(shap_path), use_column_width=True)
+        shown = True
+    if saliency_path.exists():
+        st.subheader("ECG saliency map")
+        st.image(str(saliency_path), use_column_width=True)
+        shown = True
+    if not shown:
+        st.info("Explanation images not found (look for figures/shap_force_example.png and figures/ecg_saliency.png).")

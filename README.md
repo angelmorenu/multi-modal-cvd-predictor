@@ -174,6 +174,27 @@ figures/confusion_matrix.png
 
 ---
 
+## Commit hygiene (recommended)
+
+Before committing notebooks or pushing branches, strip outputs so diffs remain clean. Two options:
+
+- Install and use nbstripout (recommended):
+
+```bash
+# install once in your environment
+pip install nbstripout
+# enable the git filter for this repo
+nbstripout --install
+# strip outputs from all tracked notebooks
+git ls-files "*.ipynb" -z | xargs -0 nbstripout
+```
+
+- Or add `.gitattributes` to enforce stripping on commit (this repo includes a starter `.gitattributes`).
+
+Keeping notebooks output-free makes PR reviews much easier.
+
+---
+
 ## 🤖 Responsible AI Goals
 
 - Fairness: Evaluate across age, gender, and race subgroups.  
