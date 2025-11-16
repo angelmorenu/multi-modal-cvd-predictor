@@ -212,20 +212,22 @@ The Streamlit app (\texttt{ui/MultiModalCVD\_app.py}) accepts structured inputs 
 I validated end-to-end execution on small, stratified splits of public data \cite{kaggle_cvd,kaggle_hospital,kaggle_ptbxl}. Training and validation losses decreased steadily; validation accuracy improved across epochs, indicating stable optimization. Table~\ref{tab:metrics} summarizes held-out metrics; Fig.~\ref{fig:cm} shows the confusion matrix.
 
 \begin{table}[!t]
-    \renewcommand{\arraystretch}{1.2}
+    \renewcommand{\arraystretch}{1.15}
     \centering
     \caption{Comparison of held-out evaluation metrics for unimodal (Tabular, ECG) and fused (Fusion) models.}
     \label{tab:metrics}
     \begin{tabular}{@{}lccc@{}}
-        	oprule
-        	extbf{Metric} & \textbf{Tabular} & \textbf{ECG} & \textbf{Fusion} \\
-        \midrule
-        Accuracy    & 0.571 & 0.571 & 0.571 \\
-        ROC AUC     & 0.545 & 0.545 & 0.545 \\
-        F1 Score    & 0.667 & 0.667 & 0.667 \\
-        Sensitivity & 0.900 & 0.900 & 0.900 \\
-        Specificity & 0.273 & 0.273 & 0.273 \\
-        \bottomrule
+    	oprule
+    	extbf{Metric} & \textbf{Tabular} & \textbf{ECG} & \textbf{Fusion} \\
+    \midrule
+    Accuracy    & 0.571 & 0.438 & 0.563 \\
+    ROC AUC     & 0.527 & 0.297 & 0.453 \\
+    PR AUC      & 0.560 & 0.375 & 0.526 \\
+    F1 Score    & 0.609 & 0.526 & 0.588 \\
+    Brier Score & 0.351 & 0.331 & 0.362 \\
+    Sensitivity & 0.700 & 0.625 & 0.625 \\
+    Specificity & 0.455 & 0.250 & 0.500 \\
+    \bottomrule
     \end{tabular}
 \end{table}
 
