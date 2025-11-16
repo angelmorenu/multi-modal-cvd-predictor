@@ -22,12 +22,26 @@ try:
 except Exception:
     SHAP_AVAILABLE = False
 
-def placeholder():
+def run_feature_importance():
+    """Train a RandomForest and plot feature importances as a fallback when SHAP is unavailable."""
+    X = np.load(processed / "tabular_train_X.npy")
+    y = np.load(processed / "tabular_train_y.npy")
+    m = min(X.shape[0], y.shape[0])
+    X, y = X[:m], y[:m]
+
+    clf = RandomForestClassifier(n_estimators=200, random_state=0)
+    clf.fit(X, y)
+    imp = clf.feature_importances_
+    idx = np.argsort(imp)[::-1]
+
     fig, ax = plt.subplots(figsize=(6,3))
-    ax.text(0.5, 0.5, "SHAP not installed\nRun: pip install shap", ha='center', va='center', fontsize=12)
-    ax.axis('off')
-    fig.savefig(figs / "shap_force_example.png", bbox_inches='tight')
-    print("Wrote placeholder: figures/shap_force_example.png")
+    ax.bar(range(len(imp)), imp[idx])
+    ax.set_xticks(range(len(imp)))
+    ax.set_xticklabels([f"f{i}" for i in idx], rotation=45)
+    ax.set_ylabel("Feature importance (MDI)")
+    fig.tight_layout()
+    fig.savefig(figs / "shap_force_example.png", dpi=150)
+    print("Wrote fallback feature-importance image: figures/shap_force_example.png")
 
 def run_shap():
     X = np.load(processed / "tabular_train_X.npy")
@@ -55,8 +69,12 @@ def run_shap():
     print("Wrote figures/shap_force_example.png")
 
 if __name__ == '__main__':
-    if not SHAP_AVAILABLE:
-        print("shap not available; writing placeholder image")
-        placeholder()
+    if SHAP_AVAILABLE:
+        try:
+            run_shap()
+        except Exception as e:
+            print("SHAP failed at runtime; falling back to feature importance:", e)
+            run_feature_importance()
     else:
-        run_shap()
+        print("shap not available; writing RandomForest feature-importance fallback image")
+        run_feature_importance()
