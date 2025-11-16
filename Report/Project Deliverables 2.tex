@@ -241,6 +241,13 @@ The model over-predicted the positive class on the test set, yielding no true ne
 \noindent\textbf{Optimization and Calibration.} Early stopping, L2 regularization, and LR scheduling will be tested; temperature scaling or isotonic regression will address calibration.
 
 \noindent\textbf{Explainability.} SHAP for tabular features and gradient-based saliency for ECG will surface explanations and improve trust. Visualizations will be integrated into the UI.
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=0.48\columnwidth]{figures/shap_force_example.png}
+    \includegraphics[width=0.48\columnwidth]{figures/ecg_saliency.png}
+    \caption{Interpretability examples. Left: tabular feature importance (SHAP or RandomForest fallback). Right: ECG saliency map (derivative-based or Captum).}
+    \label{fig:interpret}
+\end{figure}
 
 \noindent\textbf{Edge Deployment.} Quantization and TorchScript export will be evaluated for on-device inference; latency and energy will be benchmarked.
 

@@ -193,6 +193,29 @@ git ls-files "*.ipynb" -z | xargs -0 nbstripout
 
 Keeping notebooks output-free makes PR reviews much easier.
 
+## Interpretability (SHAP & ECG saliency)
+
+This repository includes lightweight interpretability scripts that produce visual summaries in `figures/`:
+
+- `scripts/interpretability_shap.py` — attempts to compute SHAP values. If `shap` is not installed or available in your environment, the script falls back to plotting RandomForest feature importances (MDI). The output is written to `figures/shap_force_example.png`.
+- `scripts/interpretability_ecg_saliency.py` — produces an ECG saliency visualization. If `captum` is available it can be integrated; otherwise the script produces a derivative-based saliency plot. The output is written to `figures/ecg_saliency.png`.
+
+To get full SHAP/Captum outputs in your local environment, install the packages and re-run the scripts:
+
+```bash
+# Activate your conda environment first (example)
+conda activate cvd_predictor
+
+# Install interpretability libraries (may take a minute)
+pip install shap captum
+
+# Run the interpretability scripts
+python scripts/interpretability_shap.py
+python scripts/interpretability_ecg_saliency.py
+```
+
+After running, confirm `figures/shap_force_example.png` and `figures/ecg_saliency.png` are created and then re-generate the PDF report.
+
 ---
 
 ## 🤖 Responsible AI Goals
