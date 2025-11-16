@@ -148,29 +148,49 @@ multi_modal_cvd_project/
 
 ---
 
-## ✅ Reproducibility Instructions
+## ✅ Reproducibility Instructions (Deliverable 3 snapshot)
 
-To reproduce Deliverable 2 results:
+The repository contains scripts that regenerate the evaluation artifacts and figures used in Deliverable 3. After activating the `cvd_predictor` conda environment, follow these steps to reproduce the evaluation and the figures included in the report.
 
-1. Run the evaluation notebook:
+1) Re-generate predictions and the metric summary (writes per-run numpy arrays and a JSON summary):
+
 ```bash
-jupyter notebook notebooks/train_eval.ipynb
-```
-This trains/evaluates models and saves predictions to:
-```bash
-results/y_true.npy
-results/y_pred.npy
-results/y_prob.npy
+python scripts/generate_predictions.py --outdir results/
 ```
 
-2. Generate the confusion-matrix figure:
+This writes files like `results/tabular_y_true.npy`, `results/tabular_y_pred.npy`, `results/tabular_y_prob.npy`, and a summary JSON at `results/metric_summary.json`.
+
+2) Recreate the main figures used in the report and UI (example commands):
+
 ```bash
-python scripts/plot_confusion.py
+# confusion matrix for fusion predictions
+python scripts/plot_confusion.py --pred results/fusion_y_pred.npy --true results/fusion_y_true.npy --out figures/confusion_matrix.png
+
+# calibration and probability histograms for the fusion model
+python scripts/plot_calibration.py --probs results/fusion_y_prob.npy --true results/fusion_y_true.npy --out figures/calibration_curve_fusion.png
+python scripts/perf_dashboard.py --probs results/fusion_y_prob.npy --true results/fusion_y_true.npy --out figures/perf_dashboard_fusion.png
 ```
-Output saved to:
+
+3) Re-run interpretability scripts (optional — install `shap` and `captum` to get full outputs):
+
 ```bash
-figures/confusion_matrix.png
+python scripts/interpretability_shap.py
+python scripts/interpretability_ecg_saliency.py
 ```
+
+4) Launch the Streamlit UI (interactive testing and demo):
+
+```bash
+streamlit run ui/MultiModalCVD_app.py --server.port 8502
+```
+
+Results snapshot (current `results/metric_summary.json` included in the repo):
+
+- Tabular model: accuracy 0.5714, ROC AUC 0.5273, PR AUC 0.5596, Brier 0.3506
+- ECG model: accuracy 0.4375, ROC AUC 0.2969, PR AUC 0.3755, Brier 0.3311
+- Fusion (fallback/stable evaluation): accuracy 0.5625, ROC AUC 0.4531, PR AUC 0.5258, Brier 0.3617
+
+These values are used in `Report/Project Deliverables 3.tex`.
 
 ---
 
@@ -207,7 +227,7 @@ To get full SHAP/Captum outputs in your local environment, install the packages 
 conda activate cvd_predictor
 
 # Install interpretability libraries (may take a minute)
-pip install shap captum
+pip install -r requirements-interpretability.txt
 
 # Run the interpretability scripts
 python scripts/interpretability_shap.py
@@ -215,6 +235,12 @@ python scripts/interpretability_ecg_saliency.py
 ```
 
 After running, confirm `figures/shap_force_example.png` and `figures/ecg_saliency.png` are created and then re-generate the PDF report.
+
+Alternatively, install just the interpretability extras with pip:
+
+```bash
+pip install -r requirements-interpretability.txt
+```
 
 ---
 

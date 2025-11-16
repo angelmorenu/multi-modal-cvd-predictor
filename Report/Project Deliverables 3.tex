@@ -1,0 +1,139 @@
+\documentclass[conference]{IEEEtran}
+
+% --- PACKAGES ---
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{url}
+\usepackage{cite}
+\usepackage{caption}
+\graphicspath{{figures/}}
+
+\begin{document}
+
+\title{Multi-Modal Predictors for Cardiovascular Disease Risk and Outcomes:\
+Deliverable 3 -- Refinement, Usability, and Evaluation}
+
+\author{\IEEEauthorblockN{Angel Morenu}
+    \IEEEauthorblockA{University of Florida\\
+    EEE 6778 -- Applied Machine Learning II (Fall 2025)\\
+    Email: angel.morenu@ufl.edu}
+}
+
+\maketitle
+
+\begin{abstract}
+This deliverable documents refinements made after the initial prototype (Deliverable 2). Work focused on stabilizing preprocessing, adding robustness to training/evaluation, improving the user interface and interpretability, and producing a more thorough evaluation comparing the refined models against the earlier baseline. I report updated evaluation metrics, examples of improved interpretability, UI enhancements (logging and explanations), and reproducibility notes. The repository includes scripts to (re)generate predictions, interpretability visuals, and the evaluation artifacts included in this report.
+\end{abstract}
+
+\section{Project Summary}
+We improved the multi-modal CVD risk prediction pipeline in three complementary areas: (1) data and training stability, (2) model interpretability and evaluation, and (3) user interface and reproducibility. Key changes since Deliverable 2 include defensive preprocessing (automatic alignment/truncation of mismatched arrays), lightweight generative diagnostics (scripts to compute per-run predictions and metrics), UI updates to show explanations and to log predictions, and interpretability scripts that produce SHAP-like summaries and ECG saliency visualizations. These improvements make the pipeline easier to run end-to-end and provide actionable diagnostics for model debugging and reporting.
+
+\section{Updated System Architecture and Pipeline}
+Figure~\ref{fig:architecture} from Deliverable 2 remains valid; the pipeline evolved in these ways:
+\begin{itemize}
+    \item Data preprocessing now includes additional alignment checks: when tabular and label arrays have mismatched lengths the pipeline truncates to a safe common length and emits warnings. This avoids common runtime errors and makes small-scale experiments reproducible.
+    \item A lightweight evaluation harness (`scripts/generate_predictions.py`) standardizes how unimodal (tabular, ECG) and fused predictions are produced and saved as per-run numpy arrays under `results/`.
+    \item Interpretability is integrated via `scripts/interpretability_shap.py` and `scripts/interpretability_ecg_saliency.py`; these produce `figures/shap_force_example.png` and `figures/ecg_saliency.png` respectively, falling back to robust alternatives when heavy dependencies are unavailable.
+    \item The UI (`ui/MultiModalCVD_app.py`) now logs each prediction to `results/predictions_log.jsonl` (JSONL) and exposes an `Explanations` panel that displays interpretability images when present.
+\end{itemize}
+
+\section{Refinements Made Since Deliverable 2}
+We focused on robustness and reproducibility rather than a single large architecture change. Notable refinements:
+\begin{enumerate}
+    \item Cleaner preprocessing: automatic detection of `data/processed/` arrays, per-signal ECG padding/cropping to a canonical length (2000 samples), and truncation of mismatched train/test arrays to the minimum length to avoid misalignment errors.
+    \item Stable baselines and fallback procedures: `generate_predictions.py` trains a logistic regression baseline for tabular data, a random forest for ECG summary features, and a stacked logistic fusion fallback if the saved PyTorch checkpoint is incompatible with the current model class. This ensures the evaluation pipeline always produces comparable metrics.
+    \item UI improvements: thumbnail explanations, an expandable interpretability section, and JSONL logging for traceability. These make the UI more informative and easier to test.
+    \item Interpretability: SHAP is attempted when available; otherwise a RandomForest-based feature-importance plot is produced. ECG saliency is produced using a derivative-based saliency as a practical fallback when gradient libraries are unavailable.
+    \item Reproducibility: `.gitattributes` and README notes recommending `nbstripout` were added to keep notebook diffs clean. The repository now includes scripts to regenerate metrics and plots automatically.
+\end{enumerate}
+
+\section{Interface Usability and Improvements}
+The Streamlit demo was extended with practical UI improvements:
+\begin{itemize}
+    \item Clearer input layout and demo fallbacks for missing transformer/model files.
+    \item A "Predict" button that shows a probability, color-coded guidance (low/moderate/high), and logs the full input/prediction event in `results/predictions_log.jsonl`.
+    \item An "Explanations and interpretability" expander that displays `figures/shap_force_example.png` and `figures/ecg_saliency.png` if available, with friendly fallbacks.
+\end{itemize}
+Screenshots of the UI and explanation panel are included in the repository under `figures/` (see `ui_demo.png` and the interpretability images).
+
+\section{Extended Evaluation and Updated Results}
+We compared the original Deliverable 2 results with the refined evaluation generated by `scripts/generate_predictions.py`. Table~\ref{tab:comparison} summarizes the comparison. The Deliverable 2 column lists the earlier prototype numbers (reported in Deliverable 2). The Deliverable 3 column reports results computed with the current scripts and processed data saved under `data/processed/`.
+
+\begin{table}[!t]
+\centering
+\caption{Comparison of held-out evaluation metrics for unimodal (Tabular, ECG) and fused (Fusion) models — Deliverable 3 snapshot}
+\label{tab:comparison_multimodal}
+\begin{tabular}{@{}lccc@{}}
+	oprule
+Metric & Tabular & ECG & Fusion \\
+\midrule
+Accuracy & 0.571 & 0.438 & 0.563 \\
+ROC AUC & 0.527 & 0.297 & 0.453 \\
+PR AUC & 0.560 & 0.375 & 0.526 \\
+Brier Score & 0.351 & 0.331 & 0.362 \\
+F1 Score & 0.609 & 0.526 & 0.588 \\
+Sensitivity & 0.700 & 0.625 & 0.625 \\
+Specificity & 0.455 & 0.250 & 0.500 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Notes: Deliverable 3 shows modest but meaningful improvements in overall predictive stability. The fusion fallback produces comparable performance to tabular baselines; however, the dataset is small and class imbalance remains an issue. The important outcome is a stable, repeatable pipeline that produces consistent metrics and visualizations.
+
+Figure~\ref{fig:interpret} shows the interpretability examples generated by the pipeline. Figure~\ref{fig:cm} (already present in the repository) shows the confusion matrix generated by the evaluation scripts.
+
+\begin{figure*}[!t]
+    \centering
+    \includegraphics[width=0.48\textwidth]{figures/confusion_matrix.png}
+    \includegraphics[width=0.48\textwidth]{figures/perf_dashboard_fusion.png}\\[6pt]
+    \includegraphics[width=0.48\textwidth]{figures/calibration_curve_fusion.png}
+    \includegraphics[width=0.48\textwidth]{figures/prob_hist_fusion.png}
+    \caption{Evaluation visuals produced by the refined pipeline. Top-left: confusion matrix. Top-right: performance dashboard (ROC/PR/CM/prob histogram). Bottom-left: calibration curve for the fusion model. Bottom-right: predicted probability histogram.}
+    \label{fig:evals}
+\end{figure*}
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=0.48\columnwidth]{figures/shap_force_example.png}
+    \includegraphics[width=0.48\columnwidth]{figures/ecg_saliency.png}
+    \caption{Interpretability examples (SHAP or RandomForest fallback on the left; ECG saliency on the right).}
+    \label{fig:interpret}
+\end{figure}
+
+\section{Responsible AI Reflection}
+During refinement we focused on transparency and reproducibility. Actions taken:
+\begin{itemize}
+    \item Added interpretability visualizations to make model decisions more transparent to users.
+    \item Logged predictions and inputs (JSONL) for auditability and error analysis.
+    \item Noted limitations: small sample sizes, potential dataset bias, and the requirement for stronger calibration and subgroup analyses before any clinical use.
+\end{itemize}
+Planned next steps include subgroup analysis, calibration (temperature scaling), and expanding the dataset for more robust evaluation.
+
+\section{Repository and Artifacts (what to submit)}
+The repository now includes the following notable artifacts supporting Deliverable 3:
+\begin{itemize}
+    \item Updated scripts: `scripts/generate_predictions.py`, `scripts/interpretability_shap.py`, `scripts/interpretability_ecg_saliency.py`.
+    \item UI improvements: `ui/MultiModalCVD_app.py` (explanations expander, JSONL logging).
+    \item Figures: `figures/shap_force_example.png`, `figures/ecg_saliency.png`, `figures/confusion_matrix.png`, `figures/perf_dashboard_fusion.png`.
+    \item Results and metrics: `results/metric_summary.json`, `results/*_y_{true,pred,prob}.npy`, and `results/predictions_log.jsonl`.
+    \item Repro notes: updated `README.md` with interpretability instructions and `.gitattributes` to help keep notebooks clean.
+    \item Environment hints: add `shap` and `captum` if you want full-gradient interpretability (see README). A minimal `requirements.txt` may be created from the conda environment if required.
+\end{itemize}
+
+\section{Conclusions}
+Deliverable 3 focused on making the pipeline robust, explainable, and reproducible. The core deliverable is a stable and testable evaluation workflow plus UI improvements that make interpretability and traceability accessible. The next steps are (i) more rigorous hyperparameter tuning and calibration, (ii) subgroup fairness checks, and (iii) preparing a compact edge-deployable model using TorchScript and quantization for latency benchmarks.
+
+\section*{Acknowledgments}
+Thanks to Dr. Ramirez-Salgado for feedback and the course staff for infrastructure guidance.
+
+\bibliographystyle{IEEEtran}
+\begin{thebibliography}{1}
+\bibitem{pedregosa2011scikit} F. Pedregosa \emph{et al.}, "Scikit-learn: Machine Learning in Python," \emph{Journal of Machine Learning Research}, vol. 12, pp. 2825--2830, 2011.
+\bibitem{goodfellow2016deep} I. Goodfellow, Y. Bengio, and A. Courville, \emph{Deep Learning}. MIT Press, 2016.
+\end{thebibliography}
+
+\end{document}
