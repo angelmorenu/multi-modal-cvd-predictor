@@ -194,6 +194,26 @@ These values are used in `Report/Project Deliverables 3.tex`.
 
 ---
 
+## 📄 Build Deliverable 3 (LaTeX)
+
+The repository includes a helper to build the Deliverable 3 PDF from the `Report/` directory. I recommend running the helper from the repository root so graphic paths resolve correctly.
+
+From the repository root:
+
+```bash
+cd "$(pwd)"
+cd Report
+../scripts/build_report.sh
+```
+
+Notes:
+- This requires a working TeX toolchain (pdflatex). If bibliography citations show as `[?]`, run `bibtex` (or biber) as appropriate and re-run `pdflatex` two more times. The helper script attempts the standard sequence but you may need to run the commands manually on some systems.
+- If you compiled from a different working directory earlier and images were missing, the helper uses a robust `\graphicspath` so running from `Report/` or the repo root should both work.
+- If floats overflow the two-column layout, try running `pdflatex` two times; if layout issues remain I'll help tune image widths or move large figures to full-width `figure*` floats.
+
+
+---
+
 ## Commit hygiene (recommended)
 
 Before committing notebooks or pushing branches, strip outputs so diffs remain clean. Two options:
