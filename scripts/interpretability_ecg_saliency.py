@@ -40,7 +40,7 @@ def run_saliency():
 
     fig, ax = plt.subplots(figsize=(8,2))
     ax.plot(sample, color='C0', label='ECG')
-    ax.fill_between(range(len(sample)), 0, sal / sal.max() * 0.5, color='C1', alpha=0.4, label='Saliency (scaled)')
+    ax.fill_between(range(len(sample)), 0, sal / (sal.max() if sal.max()!=0 else 1) * 0.5, color='C1', alpha=0.4, label='Saliency (scaled)')
     ax.set_title('ECG with Saliency (example)')
     ax.set_xlabel('Time')
     ax.set_ylabel('Amplitude')
@@ -50,8 +50,9 @@ def run_saliency():
     print("Wrote figures/ecg_saliency.png")
 
 if __name__ == '__main__':
-    if not CAPTUM_AVAILABLE:
-        print("captum not available; writing placeholder image")
-        placeholder()
-    else:
+    # Always produce a saliency image; if captum is available we could compute gradients, but fallback is derivative-based.
+    try:
         run_saliency()
+    except Exception as e:
+        print('Saliency generation failed, writing placeholder:', e)
+        placeholder()
