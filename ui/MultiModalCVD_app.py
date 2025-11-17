@@ -61,6 +61,57 @@ if transformer is not None:
     except Exception:
         pass
 
+# --- Logging and explanation helpers (defined early so UI can call them) ---
+LOG_PATH = Path("results") / "predictions_log.jsonl"
+LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+
+def append_log(entry: dict):
+    """Append a JSON line to `results/predictions_log.jsonl`.
+
+    This runs during Streamlit interactions; errors are reported to the UI.
+    """
+    try:
+        with open(LOG_PATH, "a", encoding="utf-8") as f:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    except Exception as e:
+        st.warning(f"Failed to write prediction log: {e}")
+
+def show_explanations(thumbnail: bool = True):
+    """Display SHAP and ECG saliency images if they exist.
+
+    If `thumbnail` is True, show smaller images side-by-side.
+    """
+    shap_path = Path("figures") / "shap_force_example.png"
+    saliency_path = Path("figures") / "ecg_saliency.png"
+    if thumbnail:
+        cols = st.columns(2)
+        if shap_path.exists():
+            with cols[0]:
+                st.caption("Tabular feature explanation (SHAP)")
+                st.image(str(shap_path), use_column_width=True)
+        else:
+            with cols[0]:
+                st.info("No SHAP image found: figures/shap_force_example.png")
+        if saliency_path.exists():
+            with cols[1]:
+                st.caption("ECG saliency map")
+                st.image(str(saliency_path), use_column_width=True)
+        else:
+            with cols[1]:
+                st.info("No ECG saliency image found: figures/ecg_saliency.png")
+    else:
+        shown = False
+        if shap_path.exists():
+            st.subheader("Tabular feature explanation (SHAP)")
+            st.image(str(shap_path), use_column_width=True)
+            shown = True
+        if saliency_path.exists():
+            st.subheader("ECG saliency map")
+            st.image(str(saliency_path), use_column_width=True)
+            shown = True
+        if not shown:
+            st.info("Explanation images not found (look for figures/shap_force_example.png and figures/ecg_saliency.png).")
+
 # Build model
 model = MultiModalCVD(tab_dim=tab_dim, ecg_channels=1, ecg_embed_dim=128, n_classes=2)
 
@@ -228,30 +279,3 @@ if st.button("Predict Risk"):
 
 st.caption("Demo mode: if no trained model/transformer is found, predictions are illustrative only.")
 
-LOG_PATH = Path("results") / "predictions_log.jsonl"
-LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
-
-# Helper: append a json line to results/predictions_log.jsonl
-def append_log(entry: dict):
-    try:
-        with open(LOG_PATH, "a", encoding="utf-8") as f:
-            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
-    except Exception as e:
-        st.warning(f"Failed to write prediction log: {e}")
-
-# Helper: try to show explanation images if present
-def show_explanations():
-    # SHAP and ECG saliency images are saved under figures/
-    shap_path = Path("figures") / "shap_force_example.png"
-    saliency_path = Path("figures") / "ecg_saliency.png"
-    shown = False
-    if shap_path.exists():
-        st.subheader("Tabular feature explanation (SHAP)")
-        st.image(str(shap_path), use_column_width=True)
-        shown = True
-    if saliency_path.exists():
-        st.subheader("ECG saliency map")
-        st.image(str(saliency_path), use_column_width=True)
-        shown = True
-    if not shown:
-        st.info("Explanation images not found (look for figures/shap_force_example.png and figures/ecg_saliency.png).")
