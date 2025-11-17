@@ -17,6 +17,9 @@ from sklearn.metrics import accuracy_score, f1_score, roc_auc_score, precision_r
 import json
 
 root = Path(__file__).resolve().parents[1]
+import sys
+# Ensure repository root is on sys.path so `from src...` imports work when running scripts
+sys.path.insert(0, str(root))
 processed = root / "data" / "processed"
 results = root / "results"
 figs = root / "figures"

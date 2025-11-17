@@ -107,34 +107,76 @@ This opens a local UI to input demographics, upload an ECG, and view predicted r
 ## 📁 Repository Structure
 
 ```
-multi_modal_cvd_project/
-├── data/                     
+/Volumes/Dan/MSADS Fall 2025/EEE6778/Multi_modal_CVD_Project/
+├── data/
 ├── notebooks/
-│   ├── setup.ipynb           
-│   └── train_eval.ipynb      
+│   ├── setup.ipynb
+│   └── train_eval.ipynb
 ├── src/
-│   ├── preprocess.py         
-│   ├── model.py              
-│   └── train.py, eval.py     
+│   ├── preprocess.py
+│   ├── model.py
+│   └── train.py, eval.py
 ├── ui/
-│   ├── app.py                
-│   └── MultiModalCVD_app.py  
+│   ├── app.py
+│   └── MultiModalCVD_app.py
 ├── scripts/
-│   └── plot_confusion.py   
-|   └── ui_demo.png  
-│ 
-├── figures
-|   └── confusion_matrix.png 
-|   └── ui_demo.png
-│   └── multimodal_cvd_architecture.png
-├── results/                  
-├── environment.yml           
-├── environment.cuda.yml      
-├── environment.macos.yml     
-├── README.md                 
-├── Morenu_Project Deliverable 1.docx
-└── Morenu_Deliverable2_IEEE_Report.pdf
+│   ├── plot_confusion.py
+│   ├── plot_calibration.py
+│   └── build_report.sh
+│   └── download_datasets.py
+│   └── generate_predictions.py
+│   └── interpretability_ecg_saliency.py
+│   └── interpretability_shap.py
+│   └── metric_summary.py
+│   └── perf_dashboard.py
+│   └── plot_calibration.py
+│   └── verify_preprocessing.py
+├── figures/
+│   ├── confusion_matrix.png
+│   ├── perf_dashboard_fusion.png
+│   ├── calibration_curve_fusion.png
+│   ├── prob_hist_fusion.png
+│   ├── shap_force_example.png
+│   └── ecg_saliency.png
+├── results/
+├── artifacts/
+│   ├── model.pt
+│   └── model_ecg.pt
+├── environment.yml
+├── environment.cuda.yml
+├── environment.macos.yml
+├── README.md
+└── Report/
+    ├── "Project Deliverables 3.tex"
+    └── "Project Deliverables 3.pdf"
 ```
+
+## Git commit & push conventions
+Follow a concise, conventional commit message format to make history easy to scan and automate:
+
+- Format: `<type>(<scope>): short subject`
+  - `type` examples: feat, fix, docs, chore, refactor, test
+  - `scope` examples: report, scripts, ui, data, ci
+
+- Example commit messages used in this repo:
+  - `chore(report): update Deliverable 3 cleaned LaTeX and placeholders`
+  - `feat(ui): add explanations expander and JSONL logging`
+
+- When creating a branch and pushing for the first time:
+```bash
+# create branch locally
+git checkout -b feat/reporting
+# stage files
+git add path/to/file
+# commit with a conventional message
+git commit -m "chore(report): update Deliverable 3 cleaned LaTeX and placeholders"
+# set the upstream and push
+git push --set-upstream origin feat/reporting
+```
+
+- Keep notebooks output-free before committing (use `nbstripout` or the included `.gitattributes`).
+
+This minimal convention keeps commit history consistent and makes it straightforward to find changes by scope or type.
 
 ---
 
@@ -191,26 +233,6 @@ Results snapshot (current `results/metric_summary.json` included in the repo):
 - Fusion (fallback/stable evaluation): accuracy 0.5625, ROC AUC 0.4531, PR AUC 0.5258, Brier 0.3617
 
 These values are used in `Report/Project Deliverables 3.tex`.
-
----
-
-## 📄 Build Deliverable 3 (LaTeX)
-
-The repository includes a helper to build the Deliverable 3 PDF from the `Report/` directory. I recommend running the helper from the repository root so graphic paths resolve correctly.
-
-From the repository root:
-
-```bash
-cd "$(pwd)"
-cd Report
-../scripts/build_report.sh
-```
-
-Notes:
-- This requires a working TeX toolchain (pdflatex). If bibliography citations show as `[?]`, run `bibtex` (or biber) as appropriate and re-run `pdflatex` two more times. The helper script attempts the standard sequence but you may need to run the commands manually on some systems.
-- If you compiled from a different working directory earlier and images were missing, the helper uses a robust `\graphicspath` so running from `Report/` or the repo root should both work.
-- If floats overflow the two-column layout, try running `pdflatex` two times; if layout issues remain I'll help tune image widths or move large figures to full-width `figure*` floats.
-
 
 ---
 
