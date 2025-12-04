@@ -217,8 +217,8 @@ I validated end-to-end execution on small, stratified splits of public data \cit
     \caption{Comparison of held-out evaluation metrics for unimodal (Tabular, ECG) and fused (Fusion) models.}
     \label{tab:metrics}
     \begin{tabular}{@{}lccc@{}}
-    	oprule
-    	extbf{Metric} & \textbf{Tabular} & \textbf{ECG} & \textbf{Fusion} \\
+    \toprule
+    \textbf{Metric} & \textbf{Tabular} & \textbf{ECG} & \textbf{Fusion} \\
     \midrule
     Accuracy    & 0.571 & 0.438 & 0.563 \\
     ROC AUC     & 0.527 & 0.297 & 0.453 \\
@@ -243,8 +243,30 @@ The model over-predicted the positive class on the test set, yielding no true ne
 \noindent\textbf{Explainability.} SHAP for tabular features and gradient-based saliency for ECG will surface explanations and improve trust. Visualizations will be integrated into the UI.
 \begin{figure}[!t]
     \centering
-    \includegraphics[width=0.48\columnwidth]{figures/shap_force_example.png}
-    \includegraphics[width=0.48\columnwidth]{figures/ecg_saliency.png}
+    % Left: SHAP / feature importance image with fallbacks
+    \IfFileExists{\detokenize{figures/shap_force_example.png}}{%
+        \includegraphics[width=0.48\columnwidth]{\detokenize{figures/shap_force_example.png}}%
+    }{%
+        \IfFileExists{\detokenize{figures/shap_force_example.pdf}}{%
+            \includegraphics[width=0.48\columnwidth]{\detokenize{figures/shap_force_example.pdf}}%
+        }{%
+            \fbox{%
+                \parbox[b][4cm][c]{0.48\columnwidth}{\centering SHAP / feature importance image not found\\(expected: figures/shap\_force\_example.png or .pdf)}%
+            }%
+        }%
+    }
+    % Right: ECG saliency image with fallbacks
+    \IfFileExists{\detokenize{figures/ecg_saliency.png}}{%
+        \includegraphics[width=0.48\columnwidth]{\detokenize{figures/ecg_saliency.png}}%
+    }{%
+        \IfFileExists{\detokenize{figures/ecg_saliency.pdf}}{%
+            \includegraphics[width=0.48\columnwidth]{\detokenize{figures/ecg_saliency.pdf}}%
+        }{%
+            \fbox{%
+                \parbox[b][4cm][c]{0.48\columnwidth}{\centering ECG saliency image not found\\(expected: figures/ecg\_saliency.png or .pdf)}%
+            }%
+        }%
+    }
     \caption{Interpretability examples. Left: tabular feature importance (SHAP or RandomForest fallback). Right: ECG saliency map (derivative-based or Captum).}
     \label{fig:interpret}
 \end{figure}
