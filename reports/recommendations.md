@@ -6,6 +6,11 @@ This report summarizes the current state of the repository and prioritizes the n
 
 ## Key Findings
 
+0. **A critical failure mode has been observed: all-positive predictions.**
+   - Reported confusion matrix pattern `[[0, 918], [0, 5959]]` indicates no class-0 detection.
+   - High accuracy in this setting is a majority-class artifact and should be treated as non-informative.
+   - This is now the top-priority blocker before claiming model readiness.
+
 1. **The experiment pipeline is now working end-to-end.**
    - Smoke training succeeds.
    - Per-worker augmentation randomness is handled inside the dataset.
@@ -45,6 +50,21 @@ This report summarizes the current state of the repository and prioritizes the n
 .venv/bin/python scripts/prepare_external_ecg.py --input-root data/raw/ptbdb --dataset-name ptbdb --labels-csv data/raw/ptbdb_labels.csv --ecg-len 2000 --out-dir data/external
 .venv/bin/python scripts/eval_external_ecg.py --signals data/external/external_ecg_ptbdb_signals.npy --labels data/external/external_ecg_ptbdb_labels.npy --artifacts-dir artifacts --checkpoint model.pt --out-dir results/external/ptbdb
 ```
+
+### 1.5) Fix split/evaluation validity before new modeling
+
+**Why:** If split policy and evaluation checks are weak, all downstream model comparisons are misleading.
+
+**Actions:**
+- Use label-aware patient-level stratification in `scripts/prepare_splits.py` (`--label-col`, `--patient-label-mode`).
+- Run evaluation with sanity gates in `src/eval.py` (`--fail-on-degenerate`, optional `--min-roc-auc`).
+- Reject runs that produce all-positive/all-negative predictions or near-constant probability outputs.
+
+**Acceptance criteria:**
+- No split has zero count for either class (where feasible by data size).
+- Validation confusion matrix contains both predicted classes.
+- Probability distribution spans both sides of the chosen threshold (not all >0.5 or all <0.5).
+- ROC AUC consistently above random baseline across repeated seeds.
 
 ### 2) Improve model quality on the ECG side
 
@@ -90,6 +110,19 @@ This report summarizes the current state of the repository and prioritizes the n
 - **External validation + provenance completion:** 1–2 days.
 - **ECG model improvement experiments:** 2–5 days for a first pass.
 - **Documentation finalization:** 2–4 hours.
+
+## Next 10 Execution Tasks (Ordered)
+
+1. Rebuild splits with patient-level stratification and save split statistics.
+2. Re-run train/eval on one seed with `--fail-on-degenerate` enabled.
+3. Add threshold sweep on validation (`F1`, sensitivity-priority, Youden $J$).
+4. Compare `weighted_bce` vs `focal` under identical splits.
+5. Add balanced mini-batch strategy (or equivalent sampler) in training path.
+6. Run 5-seed repeat and report mean/std for ROC AUC, PR AUC, Brier, sensitivity, specificity.
+7. Calibrate best model and re-check calibration metrics/curves.
+8. Execute external PTBDB/CPSC evaluation using frozen preprocessing and checkpoint.
+9. Generate final model selection table with uncertainty intervals.
+10. Update model card risk/limitations and deployment caveats from observed failure modes.
 
 ## Current Commands Worth Keeping
 

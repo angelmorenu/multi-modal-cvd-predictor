@@ -14,7 +14,7 @@ from sklearn.metrics import (
     brier_score_loss, confusion_matrix
 )
 
-# keep your model import
+# keep model import
 from src.model import MultiModalCVD, load_checkpoint
 
 DEFAULT_ECG_LEN = 2000
@@ -68,6 +68,40 @@ def compute_metrics(y_true, probs, threshold=0.5):
     cm = confusion_matrix(y_true, preds)
     return dict(accuracy=acc, roc_auc=roc, pr_auc=pr, brier=brier, confusion_matrix=cm, preds=preds)
 
+
+def run_failure_checks(y_true, probs, preds, threshold):
+    checks = {
+        "n_samples": len(y_true),
+        "positive_rate_true": float(np.mean(y_true)),
+        "positive_rate_pred": float(np.mean(preds)),
+        "prob_min": float(np.min(probs)),
+        "prob_max": float(np.max(probs)),
+        "prob_std": float(np.std(probs)),
+        "threshold": float(threshold),
+        "warnings": [],
+        "is_degenerate": False,
+    }
+
+    all_positive = bool(np.all(preds == 1))
+    all_negative = bool(np.all(preds == 0))
+    all_probs_above = bool(np.all(probs >= threshold))
+    all_probs_below = bool(np.all(probs < threshold))
+    almost_constant_probs = np.std(probs) < 1e-3
+
+    if all_positive:
+        checks["warnings"].append("All predictions are positive (class=1)")
+    if all_negative:
+        checks["warnings"].append("All predictions are negative (class=0)")
+    if all_probs_above:
+        checks["warnings"].append("All predicted probabilities are above threshold")
+    if all_probs_below:
+        checks["warnings"].append("All predicted probabilities are below threshold")
+    if almost_constant_probs:
+        checks["warnings"].append("Predicted probabilities are almost constant")
+
+    checks["is_degenerate"] = any([all_positive, all_negative, all_probs_above, all_probs_below, almost_constant_probs])
+    return checks
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--proc", default="data/processed", help="processed data dir")
@@ -77,6 +111,8 @@ def main():
     p.add_argument("--batch-size", type=int, default=64)
     p.add_argument("--out-dir", default="results")
     p.add_argument("--threshold", type=float, default=0.5)
+    p.add_argument("--fail-on-degenerate", action="store_true", help="Exit with code 3 if degenerate predictions are detected")
+    p.add_argument("--min-roc-auc", type=float, default=None, help="Optional minimum ROC AUC sanity threshold; warns/fails if lower")
     args = p.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s")
@@ -121,6 +157,19 @@ def main():
     logging.info("Metrics: acc=%.4f roc=%.4f pr=%.4f brier=%.4f", metrics["accuracy"], metrics["roc_auc"], metrics["pr_auc"], metrics["brier"])
     logging.info("Confusion matrix:\n%s", metrics["confusion_matrix"])
 
+    checks = run_failure_checks(yt, probs, metrics["preds"], threshold=args.threshold)
+    for w in checks["warnings"]:
+        logging.warning("Degeneracy check: %s", w)
+
+    low_roc_auc = False
+    if (
+        args.min_roc_auc is not None
+        and not np.isnan(metrics["roc_auc"])
+        and metrics["roc_auc"] < args.min_roc_auc
+    ):
+        low_roc_auc = True
+        logging.warning("ROC AUC %.4f is below --min-roc-auc %.4f", metrics["roc_auc"], args.min_roc_auc)
+
     # save outputs and provenance
     np.save(out_dir / "y_true.npy", yt)
     np.save(out_dir / "y_prob.npy", probs)
@@ -134,11 +183,17 @@ def main():
         "device": str(device),
         "n_samples": int(yt.shape[0]),
         "metrics": {k: (v.tolist() if hasattr(v, "tolist") else str(v)) for k, v in metrics.items() if k != "confusion_matrix"},
+        "failure_checks": checks,
+        "low_roc_auc": low_roc_auc,
     }
     with open(out_dir / "eval_meta.json", "w") as f:
         json.dump(meta, f, indent=2)
 
     logging.info("Saved outputs to %s", out_dir)
+
+    if args.fail_on_degenerate and (checks["is_degenerate"] or low_roc_auc):
+        logging.error("Evaluation failed sanity checks (degenerate predictions and/or low ROC AUC).")
+        raise SystemExit(3)
 
 if __name__ == "__main__":
     main()

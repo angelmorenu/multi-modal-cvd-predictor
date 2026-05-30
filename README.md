@@ -40,6 +40,48 @@ The system demonstrates how **multi-modal fusion** can improve CVD risk discrimi
 
 ---
 
+## 🚨 Current Critical Blocker (Must Fix First)
+
+Recent run behavior indicates a degenerate classifier:
+
+- Confusion matrix like `[[0, 918], [0, 5959]]`
+- All predictions positive (no class-0 recovery)
+- Probability range entirely above threshold (`min > 0.5`)
+- ROC AUC below random baseline
+
+This means model discrimination is currently not clinically usable, even if accuracy looks high due to class imbalance.
+
+### Immediate Recovery Plan
+
+1. **Stratified patient-level splitting** with label-aware balancing (implemented in `scripts/prepare_splits.py`).
+2. **Degeneracy checks in evaluation** (implemented in `src/eval.py`) using `--fail-on-degenerate` and optional `--min-roc-auc`.
+3. **Decision-threshold selection** on validation (maximize F1/Youden/clinical sensitivity target), not fixed `0.5`.
+4. **Imbalance-aware training** (weighted/focal loss, balanced sampling, and class-ratio monitoring per split).
+
+---
+
+## ✅ Targeted Cleanup Policy (Keep What Matters)
+
+To keep the project rigorous and maintainable without adding unnecessary files:
+
+- Keep: reproducibility-critical code in `src/`, `scripts/`, `tests/`, and core docs (`README.md`, `MODEL_CARD.md`, `reports/recommendations.md`).
+- Keep: small metadata artifacts needed for traceability (`results/*_meta.json`, summary metrics).
+- Exclude/untrack: local caches (`__pycache__/`, `.ipynb_checkpoints/`, `*.pyc`) and bulky generated binaries not needed for version history.
+- Store large external raw data outside Git history (or via LFS/releases) and document provenance in existing dataset docs.
+
+---
+
+## 📌 Remaining Tasks / TODOs (Medical-Readiness Track)
+
+- **Data Integrity Gate:** Verify label coding and positive-rate consistency from `preprocess` → splits → train/eval.
+- **Model Validity Gate:** Enforce fail-fast eval checks (`all-positive`, `all-negative`, near-constant probabilities, low ROC AUC).
+- **Calibration Gate:** Fit/validate calibration and report Brier + calibration curves on held-out/external sets.
+- **Generalization Gate:** Run external ECG validation (PTBDB/CPSC) with documented provenance and fixed split policy.
+- **Clinical Reporting Gate:** Report class-wise sensitivity/specificity/PPV/NPV with confidence intervals.
+- **Reproducibility Gate:** Re-run `make test`, `make eval`, and tracked experiment scripts with seed-controlled settings.
+
+---
+
 ## 📚 Deliverables Summary
 
 | Deliverable | File | Status | Description |
