@@ -19,15 +19,24 @@ Cardiovascular disease (CVD) remains the leading global cause of death, accounti
 
 The system demonstrates how **multi-modal fusion** can improve CVD risk discrimination and provides **clinically actionable explanations** via SHAP and saliency-based interpretability. End-to-end reproducibility is achieved through documented preprocessing, model training, calibration, and edge-deployable inference.
 
+**🚨 Current Status (Post-Coursework Improvement Phase):**
+- ⚠️ **Class Imbalance Issue Identified**: Previous model collapsed to predicting all samples as positive (ROC AUC: 0.4479)
+- 🔧 **Remediation In Progress**: Comprehensive improvements documented in [PROJECT_REVIEW.md](PROJECT_REVIEW.md)
+- ✅ **New Infrastructure**: Class imbalance test suite, comprehensive metrics, balancing strategies
+- 📊 **Next Steps**: Re-train with mitigation techniques, validate improvements, external validation
+
 **At a Glance:**
 - Multi-modal CVD risk prediction from tabular, admissions, and ECG data
-- Reproducible evaluation with tabular baselines, robust CV, and external ECG prep/eval
-- Experiment scaffold for stronger ECG models, class-imbalance handling, and uncertainty estimates
-- Documentation package with model card, dataset datasheets, and recommendations report
+- Reproducible evaluation with stratified CV, threshold optimization, and class imbalance handling
+- Experiment scaffold for stronger ECG models, uncertainty estimates, and rigorous evaluation
+- Documentation package with model card, dataset datasheets, clinical notes, and recommendations report
 
 **Start Here:**
-- Run `make dry-run` to verify shapes and artifact loading
-- Run `make test` to execute the smoke tests
+- ⚠️ **CRITICAL**: Read [PROJECT_REVIEW.md](PROJECT_REVIEW.md) for comprehensive analysis and remediation plan
+- 📋 **Week 1**: Run diagnostic notebook and class imbalance tests
+- 🔧 **Week 2**: Re-train with balancing strategies and threshold optimization  
+- ✅ **Validation**: Execute test suite to verify improvements
+- Run `make test` to execute all validation tests
 - Run `make docker-build` and `make docker-run` to launch the app in a container
 - Open `MODEL_CARD.md`, `data/dataset_datasheets.md`, and `reports/recommendations.md` for the docs trail
 
