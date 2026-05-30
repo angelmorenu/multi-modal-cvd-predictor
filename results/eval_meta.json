@@ -1,37 +1,35 @@
 {
-  "timestamp": 1780089678.133564,
+  "timestamp": 1780171681.4934762,
   "proc_dir": "data/processed",
   "art_dir": "artifacts",
   "ckpt": "artifacts/model.pt",
   "device": "cpu",
-  "n_samples": 21,
+  "n_samples": 7,
   "metrics": {
-    "accuracy": "0.47619047619047616",
-    "roc_auc": "0.4272727272727273",
-    "pr_auc": "0.5394304388422035",
-    "brier": "0.32485055923461914",
+    "accuracy": "0.42857142857142855",
+    "roc_auc": "0.5",
+    "pr_auc": "0.7095238095238094",
+    "brier": "0.2603859305381775",
     "preds": [
       1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
+      0,
       1,
       1,
       1,
       1,
       1
     ]
-  }
+  },
+  "failure_checks": {
+    "n_samples": 7,
+    "positive_rate_true": 0.5714285714285714,
+    "positive_rate_pred": 0.8571428571428571,
+    "prob_min": 0.45300808548927307,
+    "prob_max": 0.7662603855133057,
+    "prob_std": 0.10547730326652527,
+    "threshold": 0.5,
+    "warnings": [],
+    "is_degenerate": false
+  },
+  "low_roc_auc": false
 }

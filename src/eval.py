@@ -14,8 +14,11 @@ from sklearn.metrics import (
     brier_score_loss, confusion_matrix
 )
 
-# keep model import
-from src.model import MultiModalCVD, load_checkpoint
+# keep model import - support both direct script and module invocation
+try:
+    from src.model import MultiModalCVD, load_checkpoint
+except ImportError:
+    from model import MultiModalCVD, load_checkpoint
 
 DEFAULT_ECG_LEN = 2000
 
