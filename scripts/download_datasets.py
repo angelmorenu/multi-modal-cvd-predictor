@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Dataset downloader for Multi-Modal CVD project.
-Downloads datasets from Kaggle (requires kaggle API setup).
+Downloads Kaggle datasets and optional PhysioNet ECG datasets.
 
 Setup:
 1. Install kaggle: pip install kaggle
@@ -13,22 +13,36 @@ Usage:
     python scripts/download_datasets.py --cardio
     python scripts/download_datasets.py --hospital
     python scripts/download_datasets.py --ecg
+    python scripts/download_datasets.py --ptbdb
+    python scripts/download_datasets.py --cpsc
+    python scripts/download_datasets.py --all-external
 """
-
+# This script provides a unified interface to download all necessary datasets for the project.
+# It uses the Kaggle CLI for downloading public datasets and wfdb for PhysioNet ECG datasets. 
+# It also includes a fallback option to create small sample datasets for testing if downloads
+# fail or if the user does not have Kaggle access. The downloaded files are organized into a consistent 
+# directory structure under `data/raw/`.
 import os
 import sys
 import argparse
 import subprocess
-import zipfile
 from pathlib import Path
 
-
+# Check for Kaggle CLI availability
 def check_kaggle_installed():
     """Check if kaggle CLI is available."""
     try:
         subprocess.run(["kaggle", "--version"], capture_output=True, check=True)
         return True
     except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
+
+
+def check_wfdb_installed():
+    try:
+        import wfdb  # noqa: F401
+        return True
+    except Exception:
         return False
 
 
@@ -104,6 +118,45 @@ def download_ecg(data_dir: Path):
         print(f"❌ Download failed: {e}")
 
 
+def download_physionet_ecg(database_name: str, data_dir: Path, target_subdir: str):
+    """Download a PhysioNet ECG dataset using wfdb's downloader.
+
+    Database names are the PhysioNet/WFDB identifiers. We default to:
+    - ptbdb: PTB Diagnostic ECG Database
+    - cpsc2018: CPSC 2018 Challenge ECG dataset
+    """
+    print(f"\n📥 Downloading PhysioNet ECG dataset: {database_name}...")
+    if not check_wfdb_installed():
+        print("❌ wfdb is not installed in this environment.")
+        print("   Install with: pip install wfdb")
+        return
+
+    try:
+        import wfdb  # type: ignore
+    except Exception as exc:
+        print(f"❌ Unable to import wfdb: {exc}")
+        return
+
+    out_dir = data_dir / "raw" / target_subdir
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    try:
+        # Download all records available for the database.
+        wfdb.dl_database(database_name, dl_dir=str(out_dir), keep_subdirs=True)
+        print(f"✅ Saved PhysioNet files to: {out_dir}")
+        print(f"   Next: run scripts/prepare_external_ecg.py with --input-root {out_dir}")
+    except Exception as e:
+        print(f"❌ Download failed for {database_name}: {e}")
+
+
+def download_ptbdb(data_dir: Path):
+    download_physionet_ecg("ptbdb", data_dir, "ptbdb")
+
+
+def download_cpsc(data_dir: Path):
+    download_physionet_ecg("cpsc2018", data_dir, "cpsc2018")
+
+
 def create_sample_data(data_dir: Path):
     """Create small sample CSV files for testing (if download fails)."""
     print("\n🔧 Creating sample test data...")
@@ -155,13 +208,16 @@ def create_sample_data(data_dir: Path):
         np.save(ecg_path, signal)
     print(f"✅ Created sample ECG records in: {ecg_dir}")
 
-
+# Main entry point to parse args and trigger downloads or sample data creation
 def main():
     parser = argparse.ArgumentParser(description="Download CVD project datasets from Kaggle")
     parser.add_argument("--all", action="store_true", help="Download all datasets")
     parser.add_argument("--cardio", action="store_true", help="Download cardiovascular dataset")
     parser.add_argument("--hospital", action="store_true", help="Download hospital dataset")
     parser.add_argument("--ecg", action="store_true", help="Download ECG dataset")
+    parser.add_argument("--ptbdb", action="store_true", help="Download PhysioNet PTB Diagnostic ECG database")
+    parser.add_argument("--cpsc", action="store_true", help="Download PhysioNet CPSC 2018 ECG database")
+    parser.add_argument("--all-external", action="store_true", help="Download all external ECG sources (PTBDB + CPSC)")
     parser.add_argument("--sample", action="store_true", help="Create sample test data instead of downloading")
     parser.add_argument("--data-dir", default="data", help="Data directory (default: data)")
     
@@ -199,8 +255,14 @@ def main():
     
     if args.all or args.ecg:
         download_ecg(data_dir)
+
+    if args.all_external or args.ptbdb:
+        download_ptbdb(data_dir)
+
+    if args.all_external or args.cpsc:
+        download_cpsc(data_dir)
     
-    if not any([args.all, args.cardio, args.hospital, args.ecg]):
+    if not any([args.all, args.cardio, args.hospital, args.ecg, args.ptbdb, args.cpsc, args.all_external]):
         parser.print_help()
         print("\n💡 Tip: Use --sample to quickly create test data without Kaggle")
 

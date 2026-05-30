@@ -1,0 +1,22 @@
+# Example experiment config for ECG-only experiments
+data:
+  processed_dir: data/processed
+  ecg_key: ecg_train.npy
+  label_key: tabular_train_y.npy
+
+model:
+  name: resnet1d
+  in_channels: 1
+  num_classes: 1
+
+training:
+  epochs: 2
+  batch_size: 16
+  lr: 1e-3
+  seed: 42
+
+augmentations:
+  random_crop_len: 2000
+  noise_std: 0.01
+  scale_min: 0.9
+  scale_max: 1.1

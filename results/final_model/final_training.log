@@ -1,0 +1,29 @@
+Loading best parameters from results/optuna/best_params.json
+Best params: {'lr': 0.005399484409787433, 'dropout': 0.34044600469728353, 'batch_size': 16, 'augment_prob': 0.8324426408004217, 'early_stopping_patience': 4}
+
+Loading data...
+Train set (full): 48 | Eval set: 16
+Batch size: 16
+
+Training model with best hyperparameters...
+  LR: 0.005399
+  Dropout: 0.3404
+  Augmentation prob: 0.8324
+  Early stopping patience: 4
+
+Epoch  0 | Train Loss: 0.748 Acc: 0.562 | Val Loss: 0.839 Acc: 0.500
+Epoch  5 | Train Loss: 0.554 Acc: 0.708 | Val Loss: 0.732 Acc: 0.500
+Early stopping at epoch 7
+
+================================================================================
+FINAL RESULTS
+================================================================================
+Validation Accuracy: 0.8125
+Test Accuracy:       0.8125
+
+Results saved to results/final_model/
+  - final_metrics.json
+  - final_model.pt
+  - test_predictions.npy
+  - test_probs.npy
+  - test_labels.npy

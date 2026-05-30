@@ -35,17 +35,30 @@ if os.path.exists(META_PATH):
 # infer tab_dim
 tab_dim = 32
 if transformer is not None:
-    if expected_cols:
-        dummy_df = {c: [0] for c in expected_cols}
-        import pandas as pd
-        df = pd.DataFrame(dummy_df)
-        tab_dim = transformer.transform(df).shape[1]
-    else:
-        # fallback: try to inspect
-        import pandas as pd
-        cols = [f"f{i}" for i in range(8)]
-        df = pd.DataFrame({c: [0] for c in cols})
-        tab_dim = transformer.transform(df).shape[1]
+    try:
+        if expected_cols:
+            dummy_df = {c: [0] for c in expected_cols}
+            import pandas as pd
+            df = pd.DataFrame(dummy_df)
+            tab_dim = transformer.transform(df).shape[1]
+        else:
+            # fallback: try to inspect
+            import pandas as pd
+            cols = [f"f{i}" for i in range(8)]
+            df = pd.DataFrame({c: [0] for c in cols})
+            tab_dim = transformer.transform(df).shape[1]
+    except Exception as e:
+        print("Failed to infer tab_dim from transformer; falling back to meta/default.")
+        print("Reason:", e)
+        if os.path.exists(META_PATH):
+            try:
+                with open(META_PATH, "r") as f:
+                    meta = json.load(f)
+                fallback_dim = meta.get("tab_dim") or meta.get("n_tab_features")
+                if fallback_dim:
+                    tab_dim = int(fallback_dim)
+            except Exception:
+                pass
 print("Inferred tab_dim:", tab_dim)
 
 # build model

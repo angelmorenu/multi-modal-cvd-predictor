@@ -1,0 +1,11 @@
+{
+  "val_accuracy": 0.8125,
+  "test_accuracy": 0.8125,
+  "hyperparameters": {
+    "lr": 0.005399484409787433,
+    "dropout": 0.34044600469728353,
+    "batch_size": 16,
+    "augment_prob": 0.8324426408004217,
+    "early_stopping_patience": 4
+  }
+}

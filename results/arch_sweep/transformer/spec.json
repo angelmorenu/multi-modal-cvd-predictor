@@ -1,0 +1,6 @@
+{
+  "arch": "transformer",
+  "trials": 20,
+  "seed": 42,
+  "notes": "Adjust hyperparameters per-arch. Replace TRAIN_CMD with actual train command."
+}

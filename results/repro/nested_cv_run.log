@@ -1,0 +1,392 @@
+[Epoch 01] train_loss=0.6731 acc=0.667 | val_loss=0.7419 acc=0.500
+  Saved checkpoint: results/repro/fold_001/artifacts/model.pt
+[Epoch 02] train_loss=0.6458 acc=0.667 | val_loss=0.7429 acc=0.500
+[Epoch 03] train_loss=0.6230 acc=0.667 | val_loss=0.7197 acc=0.500
+  Saved checkpoint: results/repro/fold_001/artifacts/model.pt
+[Epoch 04] train_loss=0.6120 acc=0.667 | val_loss=0.7001 acc=0.500
+  Saved checkpoint: results/repro/fold_001/artifacts/model.pt
+[Epoch 05] train_loss=0.6020 acc=0.667 | val_loss=0.6829 acc=0.500
+  Saved checkpoint: results/repro/fold_001/artifacts/model.pt
+[Epoch 06] train_loss=0.5983 acc=0.667 | val_loss=0.6757 acc=0.500
+  Saved checkpoint: results/repro/fold_001/artifacts/model.pt
+[Epoch 07] train_loss=0.5557 acc=0.667 | val_loss=0.6676 acc=0.500
+  Saved checkpoint: results/repro/fold_001/artifacts/model.pt
+[Epoch 08] train_loss=0.5483 acc=0.722 | val_loss=0.6610 acc=0.600
+  Saved checkpoint: results/repro/fold_001/artifacts/model.pt
+[Epoch 09] train_loss=0.5706 acc=0.722 | val_loss=0.6541 acc=0.600
+  Saved checkpoint: results/repro/fold_001/artifacts/model.pt
+[Epoch 10] train_loss=0.5431 acc=0.889 | val_loss=0.6464 acc=0.600
+  Saved checkpoint: results/repro/fold_001/artifacts/model.pt
+[Epoch 11] train_loss=0.5536 acc=0.833 | val_loss=0.6419 acc=0.600
+  Saved checkpoint: results/repro/fold_001/artifacts/model.pt
+[Epoch 12] train_loss=0.4981 acc=0.889 | val_loss=0.6382 acc=0.500
+  Saved checkpoint: results/repro/fold_001/artifacts/model.pt
+[Epoch 13] train_loss=0.4649 acc=0.778 | val_loss=0.6456 acc=0.600
+[Epoch 14] train_loss=0.3985 acc=0.833 | val_loss=0.6313 acc=0.500
+  Saved checkpoint: results/repro/fold_001/artifacts/model.pt
+[Epoch 15] train_loss=0.3825 acc=0.889 | val_loss=0.6154 acc=0.700
+  Saved checkpoint: results/repro/fold_001/artifacts/model.pt
+Done.
+[Epoch 01] train_loss=0.6701 acc=0.611 | val_loss=0.7341 acc=0.500
+  Saved checkpoint: results/repro/fold_002/artifacts/model.pt
+[Epoch 02] train_loss=0.6516 acc=0.611 | val_loss=0.7218 acc=0.500
+  Saved checkpoint: results/repro/fold_002/artifacts/model.pt
+[Epoch 03] train_loss=0.6515 acc=0.611 | val_loss=0.6944 acc=0.500
+  Saved checkpoint: results/repro/fold_002/artifacts/model.pt
+[Epoch 04] train_loss=0.6484 acc=0.611 | val_loss=0.6802 acc=0.500
+  Saved checkpoint: results/repro/fold_002/artifacts/model.pt
+[Epoch 05] train_loss=0.6426 acc=0.611 | val_loss=0.6810 acc=0.500
+[Epoch 06] train_loss=0.6399 acc=0.611 | val_loss=0.6884 acc=0.500
+[Epoch 07] train_loss=0.6056 acc=0.611 | val_loss=0.6742 acc=0.500
+  Saved checkpoint: results/repro/fold_002/artifacts/model.pt
+[Epoch 08] train_loss=0.6149 acc=0.611 | val_loss=0.6555 acc=0.500
+  Saved checkpoint: results/repro/fold_002/artifacts/model.pt
+[Epoch 09] train_loss=0.6013 acc=0.611 | val_loss=0.6548 acc=0.500
+  Saved checkpoint: results/repro/fold_002/artifacts/model.pt
+[Epoch 10] train_loss=0.5807 acc=0.611 | val_loss=0.6515 acc=0.500
+  Saved checkpoint: results/repro/fold_002/artifacts/model.pt
+[Epoch 11] train_loss=0.5842 acc=0.611 | val_loss=0.6487 acc=0.500
+  Saved checkpoint: results/repro/fold_002/artifacts/model.pt
+[Epoch 12] train_loss=0.5783 acc=0.667 | val_loss=0.6339 acc=0.600
+  Saved checkpoint: results/repro/fold_002/artifacts/model.pt
+[Epoch 13] train_loss=0.5330 acc=0.611 | val_loss=0.6323 acc=0.600
+  Saved checkpoint: results/repro/fold_002/artifacts/model.pt
+[Epoch 14] train_loss=0.5290 acc=0.667 | val_loss=0.6247 acc=0.700
+  Saved checkpoint: results/repro/fold_002/artifacts/model.pt
+[Epoch 15] train_loss=0.5271 acc=0.722 | val_loss=0.6025 acc=0.700
+  Saved checkpoint: results/repro/fold_002/artifacts/model.pt
+Done.
+[Epoch 01] train_loss=0.6783 acc=0.611 | val_loss=0.7290 acc=0.500
+  Saved checkpoint: results/repro/fold_003/artifacts/model.pt
+[Epoch 02] train_loss=0.6531 acc=0.611 | val_loss=0.7433 acc=0.500
+[Epoch 03] train_loss=0.6574 acc=0.611 | val_loss=0.7497 acc=0.500
+[Epoch 04] train_loss=0.6433 acc=0.611 | val_loss=0.7550 acc=0.500
+[Epoch 05] train_loss=0.6398 acc=0.611 | val_loss=0.7375 acc=0.500
+[Epoch 06] train_loss=0.6274 acc=0.611 | val_loss=0.7058 acc=0.500
+  Saved checkpoint: results/repro/fold_003/artifacts/model.pt
+[Epoch 07] train_loss=0.5694 acc=0.611 | val_loss=0.6920 acc=0.500
+  Saved checkpoint: results/repro/fold_003/artifacts/model.pt
+[Epoch 08] train_loss=0.5802 acc=0.611 | val_loss=0.6790 acc=0.700
+  Saved checkpoint: results/repro/fold_003/artifacts/model.pt
+[Epoch 09] train_loss=0.5411 acc=0.722 | val_loss=0.6738 acc=0.700
+  Saved checkpoint: results/repro/fold_003/artifacts/model.pt
+[Epoch 10] train_loss=0.5042 acc=0.722 | val_loss=0.6792 acc=0.600
+[Epoch 11] train_loss=0.4852 acc=0.722 | val_loss=0.6962 acc=0.600
+[Epoch 12] train_loss=0.4904 acc=0.722 | val_loss=0.7023 acc=0.600
+[Epoch 13] train_loss=0.4466 acc=0.778 | val_loss=0.7076 acc=0.700
+[Epoch 14] train_loss=0.3764 acc=0.833 | val_loss=0.7217 acc=0.700
+[Epoch 15] train_loss=0.3220 acc=0.889 | val_loss=0.6999 acc=0.600
+Done.
+[Epoch 01] train_loss=0.6774 acc=0.632 | val_loss=0.7186 acc=0.500
+  Saved checkpoint: results/repro/fold_004/artifacts/model.pt
+[Epoch 02] train_loss=0.6542 acc=0.632 | val_loss=0.7437 acc=0.500
+[Epoch 03] train_loss=0.6327 acc=0.632 | val_loss=0.7276 acc=0.500
+[Epoch 04] train_loss=0.6331 acc=0.632 | val_loss=0.7052 acc=0.500
+  Saved checkpoint: results/repro/fold_004/artifacts/model.pt
+[Epoch 05] train_loss=0.6025 acc=0.632 | val_loss=0.6971 acc=0.500
+  Saved checkpoint: results/repro/fold_004/artifacts/model.pt
+[Epoch 06] train_loss=0.6047 acc=0.632 | val_loss=0.6865 acc=0.500
+  Saved checkpoint: results/repro/fold_004/artifacts/model.pt
+[Epoch 07] train_loss=0.5816 acc=0.632 | val_loss=0.6741 acc=0.500
+  Saved checkpoint: results/repro/fold_004/artifacts/model.pt
+[Epoch 08] train_loss=0.5603 acc=0.632 | val_loss=0.6644 acc=0.600
+  Saved checkpoint: results/repro/fold_004/artifacts/model.pt
+[Epoch 09] train_loss=0.5369 acc=0.632 | val_loss=0.6429 acc=0.600
+  Saved checkpoint: results/repro/fold_004/artifacts/model.pt
+[Epoch 10] train_loss=0.5132 acc=0.737 | val_loss=0.6440 acc=0.600
+[Epoch 11] train_loss=0.4947 acc=0.737 | val_loss=0.6466 acc=0.600
+[Epoch 12] train_loss=0.4887 acc=0.737 | val_loss=0.6578 acc=0.600
+[Epoch 13] train_loss=0.4190 acc=0.789 | val_loss=0.7031 acc=0.600
+[Epoch 14] train_loss=0.4129 acc=0.842 | val_loss=0.8033 acc=0.600
+[Epoch 15] train_loss=0.4134 acc=0.842 | val_loss=0.7382 acc=0.600
+Done.
+[Epoch 01] train_loss=0.7074 acc=0.526 | val_loss=0.7037 acc=0.300
+  Saved checkpoint: results/repro/fold_005/artifacts/model.pt
+[Epoch 02] train_loss=0.6940 acc=0.526 | val_loss=0.7009 acc=0.500
+  Saved checkpoint: results/repro/fold_005/artifacts/model.pt
+[Epoch 03] train_loss=0.6702 acc=0.526 | val_loss=0.6955 acc=0.500
+  Saved checkpoint: results/repro/fold_005/artifacts/model.pt
+[Epoch 04] train_loss=0.6605 acc=0.579 | val_loss=0.6848 acc=0.500
+  Saved checkpoint: results/repro/fold_005/artifacts/model.pt
+[Epoch 05] train_loss=0.6453 acc=0.684 | val_loss=0.6748 acc=0.600
+  Saved checkpoint: results/repro/fold_005/artifacts/model.pt
+[Epoch 06] train_loss=0.6451 acc=0.632 | val_loss=0.6710 acc=0.600
+  Saved checkpoint: results/repro/fold_005/artifacts/model.pt
+[Epoch 07] train_loss=0.6484 acc=0.789 | val_loss=0.6688 acc=0.600
+  Saved checkpoint: results/repro/fold_005/artifacts/model.pt
+[Epoch 08] train_loss=0.6256 acc=0.737 | val_loss=0.6619 acc=0.700
+  Saved checkpoint: results/repro/fold_005/artifacts/model.pt
+[Epoch 09] train_loss=0.6072 acc=0.737 | val_loss=0.6495 acc=0.500
+  Saved checkpoint: results/repro/fold_005/artifacts/model.pt
+[Epoch 10] train_loss=0.5761 acc=0.789 | val_loss=0.6416 acc=0.600
+  Saved checkpoint: results/repro/fold_005/artifacts/model.pt
+[Epoch 11] train_loss=0.5538 acc=1.000 | val_loss=0.6365 acc=0.600
+  Saved checkpoint: results/repro/fold_005/artifacts/model.pt
+[Epoch 12] train_loss=0.5597 acc=0.789 | val_loss=0.6325 acc=0.500
+  Saved checkpoint: results/repro/fold_005/artifacts/model.pt
+[Epoch 13] train_loss=0.4957 acc=0.842 | val_loss=0.6375 acc=0.600
+[Epoch 14] train_loss=0.5147 acc=0.737 | val_loss=0.6775 acc=0.600
+[Epoch 15] train_loss=0.4208 acc=0.947 | val_loss=0.6921 acc=0.600
+Done.
+[Epoch 01] train_loss=0.6748 acc=0.722 | val_loss=0.7839 acc=0.500
+  Saved checkpoint: results/repro/fold_006/artifacts/model.pt
+[Epoch 02] train_loss=0.6116 acc=0.722 | val_loss=0.7573 acc=0.500
+  Saved checkpoint: results/repro/fold_006/artifacts/model.pt
+[Epoch 03] train_loss=0.5985 acc=0.722 | val_loss=0.7410 acc=0.500
+  Saved checkpoint: results/repro/fold_006/artifacts/model.pt
+[Epoch 04] train_loss=0.5796 acc=0.722 | val_loss=0.7333 acc=0.500
+  Saved checkpoint: results/repro/fold_006/artifacts/model.pt
+[Epoch 05] train_loss=0.5782 acc=0.722 | val_loss=0.7331 acc=0.500
+  Saved checkpoint: results/repro/fold_006/artifacts/model.pt
+[Epoch 06] train_loss=0.5622 acc=0.722 | val_loss=0.7552 acc=0.500
+[Epoch 07] train_loss=0.5302 acc=0.722 | val_loss=0.7944 acc=0.500
+[Epoch 08] train_loss=0.5417 acc=0.722 | val_loss=0.7790 acc=0.500
+[Epoch 09] train_loss=0.5292 acc=0.722 | val_loss=0.7534 acc=0.500
+[Epoch 10] train_loss=0.4895 acc=0.722 | val_loss=0.7206 acc=0.500
+  Saved checkpoint: results/repro/fold_006/artifacts/model.pt
+[Epoch 11] train_loss=0.5111 acc=0.722 | val_loss=0.7108 acc=0.500
+  Saved checkpoint: results/repro/fold_006/artifacts/model.pt
+[Epoch 12] train_loss=0.4678 acc=0.722 | val_loss=0.6965 acc=0.500
+  Saved checkpoint: results/repro/fold_006/artifacts/model.pt
+[Epoch 13] train_loss=0.4409 acc=0.722 | val_loss=0.6839 acc=0.500
+  Saved checkpoint: results/repro/fold_006/artifacts/model.pt
+[Epoch 14] train_loss=0.4414 acc=0.722 | val_loss=0.7068 acc=0.500
+[Epoch 15] train_loss=0.3723 acc=0.833 | val_loss=0.8032 acc=0.500
+Done.
+[Epoch 01] train_loss=0.6748 acc=0.611 | val_loss=0.7216 acc=0.500
+  Saved checkpoint: results/repro/fold_007/artifacts/model.pt
+[Epoch 02] train_loss=0.6577 acc=0.611 | val_loss=0.7141 acc=0.500
+  Saved checkpoint: results/repro/fold_007/artifacts/model.pt
+[Epoch 03] train_loss=0.6543 acc=0.611 | val_loss=0.6928 acc=0.500
+  Saved checkpoint: results/repro/fold_007/artifacts/model.pt
+[Epoch 04] train_loss=0.6408 acc=0.611 | val_loss=0.6784 acc=0.500
+  Saved checkpoint: results/repro/fold_007/artifacts/model.pt
+[Epoch 05] train_loss=0.6314 acc=0.667 | val_loss=0.6784 acc=0.500
+[Epoch 06] train_loss=0.6168 acc=0.611 | val_loss=0.6846 acc=0.500
+[Epoch 07] train_loss=0.5830 acc=0.611 | val_loss=0.6710 acc=0.500
+  Saved checkpoint: results/repro/fold_007/artifacts/model.pt
+[Epoch 08] train_loss=0.5963 acc=0.611 | val_loss=0.6530 acc=0.600
+  Saved checkpoint: results/repro/fold_007/artifacts/model.pt
+[Epoch 09] train_loss=0.5623 acc=0.611 | val_loss=0.6428 acc=0.600
+  Saved checkpoint: results/repro/fold_007/artifacts/model.pt
+[Epoch 10] train_loss=0.5386 acc=0.667 | val_loss=0.6270 acc=0.700
+  Saved checkpoint: results/repro/fold_007/artifacts/model.pt
+[Epoch 11] train_loss=0.5129 acc=0.778 | val_loss=0.6155 acc=0.700
+  Saved checkpoint: results/repro/fold_007/artifacts/model.pt
+[Epoch 12] train_loss=0.5074 acc=0.722 | val_loss=0.6008 acc=0.700
+  Saved checkpoint: results/repro/fold_007/artifacts/model.pt
+[Epoch 13] train_loss=0.4568 acc=0.833 | val_loss=0.6096 acc=0.700
+[Epoch 14] train_loss=0.4365 acc=0.778 | val_loss=0.6148 acc=0.700
+[Epoch 15] train_loss=0.4051 acc=0.889 | val_loss=0.5815 acc=0.800
+  Saved checkpoint: results/repro/fold_007/artifacts/model.pt
+Done.
+[Epoch 01] train_loss=0.6737 acc=0.611 | val_loss=0.7043 acc=0.500
+  Saved checkpoint: results/repro/fold_008/artifacts/model.pt
+[Epoch 02] train_loss=0.6513 acc=0.611 | val_loss=0.7143 acc=0.500
+[Epoch 03] train_loss=0.6687 acc=0.611 | val_loss=0.7311 acc=0.500
+[Epoch 04] train_loss=0.6546 acc=0.611 | val_loss=0.7327 acc=0.500
+[Epoch 05] train_loss=0.6479 acc=0.611 | val_loss=0.7052 acc=0.500
+[Epoch 06] train_loss=0.6329 acc=0.611 | val_loss=0.6765 acc=0.500
+  Saved checkpoint: results/repro/fold_008/artifacts/model.pt
+[Epoch 07] train_loss=0.6071 acc=0.611 | val_loss=0.6658 acc=0.500
+  Saved checkpoint: results/repro/fold_008/artifacts/model.pt
+[Epoch 08] train_loss=0.5891 acc=0.611 | val_loss=0.6617 acc=0.600
+  Saved checkpoint: results/repro/fold_008/artifacts/model.pt
+[Epoch 09] train_loss=0.5906 acc=0.611 | val_loss=0.6774 acc=0.500
+[Epoch 10] train_loss=0.5797 acc=0.611 | val_loss=0.6921 acc=0.500
+[Epoch 11] train_loss=0.5515 acc=0.611 | val_loss=0.6951 acc=0.600
+[Epoch 12] train_loss=0.5509 acc=0.611 | val_loss=0.7233 acc=0.600
+[Epoch 13] train_loss=0.5536 acc=0.667 | val_loss=0.7109 acc=0.600
+[Epoch 14] train_loss=0.5334 acc=0.722 | val_loss=0.6916 acc=0.600
+[Epoch 15] train_loss=0.4811 acc=0.722 | val_loss=0.6360 acc=0.700
+  Saved checkpoint: results/repro/fold_008/artifacts/model.pt
+Done.
+[Epoch 01] train_loss=0.6948 acc=0.579 | val_loss=0.7268 acc=0.500
+  Saved checkpoint: results/repro/fold_009/artifacts/model.pt
+[Epoch 02] train_loss=0.6766 acc=0.579 | val_loss=0.7329 acc=0.500
+[Epoch 03] train_loss=0.6624 acc=0.579 | val_loss=0.7114 acc=0.500
+  Saved checkpoint: results/repro/fold_009/artifacts/model.pt
+[Epoch 04] train_loss=0.6423 acc=0.579 | val_loss=0.6984 acc=0.500
+  Saved checkpoint: results/repro/fold_009/artifacts/model.pt
+[Epoch 05] train_loss=0.6378 acc=0.579 | val_loss=0.6900 acc=0.500
+  Saved checkpoint: results/repro/fold_009/artifacts/model.pt
+[Epoch 06] train_loss=0.6292 acc=0.579 | val_loss=0.6851 acc=0.600
+  Saved checkpoint: results/repro/fold_009/artifacts/model.pt
+[Epoch 07] train_loss=0.5974 acc=0.684 | val_loss=0.6829 acc=0.600
+  Saved checkpoint: results/repro/fold_009/artifacts/model.pt
+[Epoch 08] train_loss=0.5674 acc=0.737 | val_loss=0.6874 acc=0.600
+[Epoch 09] train_loss=0.5582 acc=0.789 | val_loss=0.6833 acc=0.600
+[Epoch 10] train_loss=0.5035 acc=0.789 | val_loss=0.6623 acc=0.700
+  Saved checkpoint: results/repro/fold_009/artifacts/model.pt
+[Epoch 11] train_loss=0.4861 acc=0.842 | val_loss=0.6554 acc=0.700
+  Saved checkpoint: results/repro/fold_009/artifacts/model.pt
+[Epoch 12] train_loss=0.4596 acc=0.895 | val_loss=0.6690 acc=0.800
+[Epoch 13] train_loss=0.4277 acc=0.842 | val_loss=0.6944 acc=0.800
+[Epoch 14] train_loss=0.4116 acc=0.737 | val_loss=0.7655 acc=0.600
+[Epoch 15] train_loss=0.3677 acc=0.842 | val_loss=0.9016 acc=0.600
+Done.
+[Epoch 01] train_loss=0.7247 acc=0.211 | val_loss=0.7056 acc=0.500
+  Saved checkpoint: results/repro/fold_010/artifacts/model.pt
+[Epoch 02] train_loss=0.6833 acc=0.579 | val_loss=0.6934 acc=0.500
+  Saved checkpoint: results/repro/fold_010/artifacts/model.pt
+[Epoch 03] train_loss=0.6725 acc=0.526 | val_loss=0.6828 acc=0.700
+  Saved checkpoint: results/repro/fold_010/artifacts/model.pt
+[Epoch 04] train_loss=0.6720 acc=0.632 | val_loss=0.6752 acc=0.700
+  Saved checkpoint: results/repro/fold_010/artifacts/model.pt
+[Epoch 05] train_loss=0.6414 acc=0.737 | val_loss=0.6680 acc=0.700
+  Saved checkpoint: results/repro/fold_010/artifacts/model.pt
+[Epoch 06] train_loss=0.6500 acc=0.684 | val_loss=0.6602 acc=0.700
+  Saved checkpoint: results/repro/fold_010/artifacts/model.pt
+[Epoch 07] train_loss=0.6252 acc=0.684 | val_loss=0.6578 acc=0.500
+  Saved checkpoint: results/repro/fold_010/artifacts/model.pt
+[Epoch 08] train_loss=0.5958 acc=0.842 | val_loss=0.6549 acc=0.500
+  Saved checkpoint: results/repro/fold_010/artifacts/model.pt
+[Epoch 09] train_loss=0.5884 acc=0.842 | val_loss=0.6552 acc=0.600
+[Epoch 10] train_loss=0.5696 acc=0.684 | val_loss=0.6611 acc=0.600
+[Epoch 11] train_loss=0.5589 acc=0.842 | val_loss=0.6431 acc=0.500
+  Saved checkpoint: results/repro/fold_010/artifacts/model.pt
+[Epoch 12] train_loss=0.5241 acc=0.789 | val_loss=0.6573 acc=0.500
+[Epoch 13] train_loss=0.4798 acc=0.789 | val_loss=0.6600 acc=0.600
+[Epoch 14] train_loss=0.3998 acc=0.947 | val_loss=0.6342 acc=0.600
+  Saved checkpoint: results/repro/fold_010/artifacts/model.pt
+[Epoch 15] train_loss=0.3737 acc=0.947 | val_loss=0.6255 acc=0.700
+  Saved checkpoint: results/repro/fold_010/artifacts/model.pt
+Done.
+[Epoch 01] train_loss=0.6778 acc=0.611 | val_loss=0.7186 acc=0.500
+  Saved checkpoint: results/repro/fold_011/artifacts/model.pt
+[Epoch 02] train_loss=0.6654 acc=0.611 | val_loss=0.7084 acc=0.500
+  Saved checkpoint: results/repro/fold_011/artifacts/model.pt
+[Epoch 03] train_loss=0.6562 acc=0.611 | val_loss=0.6940 acc=0.500
+  Saved checkpoint: results/repro/fold_011/artifacts/model.pt
+[Epoch 04] train_loss=0.6432 acc=0.611 | val_loss=0.6837 acc=0.500
+  Saved checkpoint: results/repro/fold_011/artifacts/model.pt
+[Epoch 05] train_loss=0.6339 acc=0.611 | val_loss=0.6767 acc=0.500
+  Saved checkpoint: results/repro/fold_011/artifacts/model.pt
+[Epoch 06] train_loss=0.6271 acc=0.611 | val_loss=0.6785 acc=0.500
+[Epoch 07] train_loss=0.6112 acc=0.611 | val_loss=0.6739 acc=0.500
+  Saved checkpoint: results/repro/fold_011/artifacts/model.pt
+[Epoch 08] train_loss=0.6004 acc=0.722 | val_loss=0.6590 acc=0.500
+  Saved checkpoint: results/repro/fold_011/artifacts/model.pt
+[Epoch 09] train_loss=0.5764 acc=0.722 | val_loss=0.6534 acc=0.600
+  Saved checkpoint: results/repro/fold_011/artifacts/model.pt
+[Epoch 10] train_loss=0.5719 acc=0.778 | val_loss=0.6447 acc=0.600
+  Saved checkpoint: results/repro/fold_011/artifacts/model.pt
+[Epoch 11] train_loss=0.5842 acc=0.778 | val_loss=0.6400 acc=0.600
+  Saved checkpoint: results/repro/fold_011/artifacts/model.pt
+[Epoch 12] train_loss=0.5300 acc=0.778 | val_loss=0.6387 acc=0.600
+  Saved checkpoint: results/repro/fold_011/artifacts/model.pt
+[Epoch 13] train_loss=0.5036 acc=0.778 | val_loss=0.6588 acc=0.600
+[Epoch 14] train_loss=0.4990 acc=0.722 | val_loss=0.6588 acc=0.600
+[Epoch 15] train_loss=0.4530 acc=0.833 | val_loss=0.6344 acc=0.600
+  Saved checkpoint: results/repro/fold_011/artifacts/model.pt
+Done.
+[Epoch 01] train_loss=0.7005 acc=0.556 | val_loss=0.7044 acc=0.500
+  Saved checkpoint: results/repro/fold_012/artifacts/model.pt
+[Epoch 02] train_loss=0.6842 acc=0.556 | val_loss=0.6929 acc=0.500
+  Saved checkpoint: results/repro/fold_012/artifacts/model.pt
+[Epoch 03] train_loss=0.6746 acc=0.556 | val_loss=0.6860 acc=0.500
+  Saved checkpoint: results/repro/fold_012/artifacts/model.pt
+[Epoch 04] train_loss=0.6491 acc=0.667 | val_loss=0.6776 acc=0.500
+  Saved checkpoint: results/repro/fold_012/artifacts/model.pt
+[Epoch 05] train_loss=0.6520 acc=0.722 | val_loss=0.6674 acc=0.600
+  Saved checkpoint: results/repro/fold_012/artifacts/model.pt
+[Epoch 06] train_loss=0.6307 acc=0.722 | val_loss=0.6574 acc=0.800
+  Saved checkpoint: results/repro/fold_012/artifacts/model.pt
+[Epoch 07] train_loss=0.6212 acc=0.667 | val_loss=0.6533 acc=0.700
+  Saved checkpoint: results/repro/fold_012/artifacts/model.pt
+[Epoch 08] train_loss=0.5969 acc=0.778 | val_loss=0.6514 acc=0.600
+  Saved checkpoint: results/repro/fold_012/artifacts/model.pt
+[Epoch 09] train_loss=0.5953 acc=0.778 | val_loss=0.6439 acc=0.600
+  Saved checkpoint: results/repro/fold_012/artifacts/model.pt
+[Epoch 10] train_loss=0.5571 acc=0.778 | val_loss=0.6371 acc=0.600
+  Saved checkpoint: results/repro/fold_012/artifacts/model.pt
+[Epoch 11] train_loss=0.5481 acc=0.833 | val_loss=0.6299 acc=0.700
+  Saved checkpoint: results/repro/fold_012/artifacts/model.pt
+[Epoch 12] train_loss=0.5221 acc=0.833 | val_loss=0.6244 acc=0.600
+  Saved checkpoint: results/repro/fold_012/artifacts/model.pt
+[Epoch 13] train_loss=0.4781 acc=0.889 | val_loss=0.6193 acc=0.500
+  Saved checkpoint: results/repro/fold_012/artifacts/model.pt
+[Epoch 14] train_loss=0.4368 acc=0.833 | val_loss=0.6480 acc=0.500
+[Epoch 15] train_loss=0.3841 acc=0.889 | val_loss=0.6923 acc=0.600
+Done.
+[Epoch 01] train_loss=0.6589 acc=0.667 | val_loss=0.7532 acc=0.500
+  Saved checkpoint: results/repro/fold_013/artifacts/model.pt
+[Epoch 02] train_loss=0.6302 acc=0.667 | val_loss=0.7853 acc=0.500
+[Epoch 03] train_loss=0.6493 acc=0.667 | val_loss=0.8153 acc=0.500
+[Epoch 04] train_loss=0.6260 acc=0.667 | val_loss=0.8237 acc=0.500
+[Epoch 05] train_loss=0.6216 acc=0.667 | val_loss=0.7751 acc=0.500
+[Epoch 06] train_loss=0.5973 acc=0.667 | val_loss=0.7418 acc=0.500
+  Saved checkpoint: results/repro/fold_013/artifacts/model.pt
+[Epoch 07] train_loss=0.5625 acc=0.667 | val_loss=0.7422 acc=0.500
+[Epoch 08] train_loss=0.5878 acc=0.667 | val_loss=0.7423 acc=0.500
+[Epoch 09] train_loss=0.5685 acc=0.667 | val_loss=0.7621 acc=0.500
+[Epoch 10] train_loss=0.5488 acc=0.667 | val_loss=0.7824 acc=0.500
+[Epoch 11] train_loss=0.5344 acc=0.667 | val_loss=0.8013 acc=0.500
+[Epoch 12] train_loss=0.5582 acc=0.667 | val_loss=0.8403 acc=0.500
+[Epoch 13] train_loss=0.5125 acc=0.722 | val_loss=0.8561 acc=0.500
+[Epoch 14] train_loss=0.4883 acc=0.667 | val_loss=0.8590 acc=0.500
+[Epoch 15] train_loss=0.4446 acc=0.722 | val_loss=0.7799 acc=0.600
+Done.
+[Epoch 01] train_loss=0.6962 acc=0.579 | val_loss=0.6965 acc=0.500
+  Saved checkpoint: results/repro/fold_014/artifacts/model.pt
+[Epoch 02] train_loss=0.6498 acc=0.632 | val_loss=0.7129 acc=0.500
+[Epoch 03] train_loss=0.6176 acc=0.632 | val_loss=0.7329 acc=0.500
+[Epoch 04] train_loss=0.6261 acc=0.632 | val_loss=0.7372 acc=0.500
+[Epoch 05] train_loss=0.5952 acc=0.632 | val_loss=0.7263 acc=0.500
+[Epoch 06] train_loss=0.6227 acc=0.632 | val_loss=0.7014 acc=0.500
+[Epoch 07] train_loss=0.6035 acc=0.632 | val_loss=0.6630 acc=0.500
+  Saved checkpoint: results/repro/fold_014/artifacts/model.pt
+[Epoch 08] train_loss=0.5677 acc=0.684 | val_loss=0.6459 acc=0.700
+  Saved checkpoint: results/repro/fold_014/artifacts/model.pt
+[Epoch 09] train_loss=0.5414 acc=0.684 | val_loss=0.6320 acc=0.700
+  Saved checkpoint: results/repro/fold_014/artifacts/model.pt
+[Epoch 10] train_loss=0.4806 acc=0.737 | val_loss=0.6270 acc=0.700
+  Saved checkpoint: results/repro/fold_014/artifacts/model.pt
+[Epoch 11] train_loss=0.4885 acc=0.684 | val_loss=0.6368 acc=0.600
+[Epoch 12] train_loss=0.4696 acc=0.737 | val_loss=0.6443 acc=0.600
+[Epoch 13] train_loss=0.4439 acc=0.789 | val_loss=0.6262 acc=0.600
+  Saved checkpoint: results/repro/fold_014/artifacts/model.pt
+[Epoch 14] train_loss=0.3885 acc=0.789 | val_loss=0.6461 acc=0.700
+[Epoch 15] train_loss=0.3546 acc=0.842 | val_loss=0.5977 acc=0.800
+  Saved checkpoint: results/repro/fold_014/artifacts/model.pt
+Done.
+[Epoch 01] train_loss=0.6996 acc=0.579 | val_loss=0.7011 acc=0.600
+  Saved checkpoint: results/repro/fold_015/artifacts/model.pt
+[Epoch 02] train_loss=0.6698 acc=0.579 | val_loss=0.7029 acc=0.500
+[Epoch 03] train_loss=0.6626 acc=0.579 | val_loss=0.7063 acc=0.500
+[Epoch 04] train_loss=0.6508 acc=0.579 | val_loss=0.7107 acc=0.500
+[Epoch 05] train_loss=0.6434 acc=0.579 | val_loss=0.7018 acc=0.500
+[Epoch 06] train_loss=0.6412 acc=0.579 | val_loss=0.6848 acc=0.500
+  Saved checkpoint: results/repro/fold_015/artifacts/model.pt
+[Epoch 07] train_loss=0.5980 acc=0.579 | val_loss=0.6676 acc=0.700
+  Saved checkpoint: results/repro/fold_015/artifacts/model.pt
+[Epoch 08] train_loss=0.5679 acc=0.737 | val_loss=0.6538 acc=0.700
+  Saved checkpoint: results/repro/fold_015/artifacts/model.pt
+[Epoch 09] train_loss=0.5481 acc=0.789 | val_loss=0.6396 acc=0.700
+  Saved checkpoint: results/repro/fold_015/artifacts/model.pt
+[Epoch 10] train_loss=0.5176 acc=0.895 | val_loss=0.6299 acc=0.600
+  Saved checkpoint: results/repro/fold_015/artifacts/model.pt
+[Epoch 11] train_loss=0.5205 acc=0.842 | val_loss=0.6165 acc=0.600
+  Saved checkpoint: results/repro/fold_015/artifacts/model.pt
+[Epoch 12] train_loss=0.4862 acc=0.789 | val_loss=0.6362 acc=0.700
+[Epoch 13] train_loss=0.4469 acc=0.789 | val_loss=0.6598 acc=0.700
+[Epoch 14] train_loss=0.4168 acc=0.895 | val_loss=0.6102 acc=0.600
+  Saved checkpoint: results/repro/fold_015/artifacts/model.pt
+[Epoch 15] train_loss=0.4224 acc=0.947 | val_loss=0.6639 acc=0.700
+Done.
+Wrote 15 fold manifests and run script to results/repro
+Running: python -m src.train --processed_dir data/processed --artifacts_dir results/repro/fold_001/artifacts --epochs 15 --batch_size 8 --seed 42 --patients-file results/repro/fold_001/train_patients.json
+Running: python -m src.train --processed_dir data/processed --artifacts_dir results/repro/fold_002/artifacts --epochs 15 --batch_size 8 --seed 42 --patients-file results/repro/fold_002/train_patients.json
+Running: python -m src.train --processed_dir data/processed --artifacts_dir results/repro/fold_003/artifacts --epochs 15 --batch_size 8 --seed 42 --patients-file results/repro/fold_003/train_patients.json
+Running: python -m src.train --processed_dir data/processed --artifacts_dir results/repro/fold_004/artifacts --epochs 15 --batch_size 8 --seed 42 --patients-file results/repro/fold_004/train_patients.json
+Running: python -m src.train --processed_dir data/processed --artifacts_dir results/repro/fold_005/artifacts --epochs 15 --batch_size 8 --seed 42 --patients-file results/repro/fold_005/train_patients.json
+Running: python -m src.train --processed_dir data/processed --artifacts_dir results/repro/fold_006/artifacts --epochs 15 --batch_size 8 --seed 42 --patients-file results/repro/fold_006/train_patients.json
+Running: python -m src.train --processed_dir data/processed --artifacts_dir results/repro/fold_007/artifacts --epochs 15 --batch_size 8 --seed 42 --patients-file results/repro/fold_007/train_patients.json
+Running: python -m src.train --processed_dir data/processed --artifacts_dir results/repro/fold_008/artifacts --epochs 15 --batch_size 8 --seed 42 --patients-file results/repro/fold_008/train_patients.json
+Running: python -m src.train --processed_dir data/processed --artifacts_dir results/repro/fold_009/artifacts --epochs 15 --batch_size 8 --seed 42 --patients-file results/repro/fold_009/train_patients.json
+Running: python -m src.train --processed_dir data/processed --artifacts_dir results/repro/fold_010/artifacts --epochs 15 --batch_size 8 --seed 42 --patients-file results/repro/fold_010/train_patients.json
+Running: python -m src.train --processed_dir data/processed --artifacts_dir results/repro/fold_011/artifacts --epochs 15 --batch_size 8 --seed 42 --patients-file results/repro/fold_011/train_patients.json
+Running: python -m src.train --processed_dir data/processed --artifacts_dir results/repro/fold_012/artifacts --epochs 15 --batch_size 8 --seed 42 --patients-file results/repro/fold_012/train_patients.json
+Running: python -m src.train --processed_dir data/processed --artifacts_dir results/repro/fold_013/artifacts --epochs 15 --batch_size 8 --seed 42 --patients-file results/repro/fold_013/train_patients.json
+Running: python -m src.train --processed_dir data/processed --artifacts_dir results/repro/fold_014/artifacts --epochs 15 --batch_size 8 --seed 42 --patients-file results/repro/fold_014/train_patients.json
+Running: python -m src.train --processed_dir data/processed --artifacts_dir results/repro/fold_015/artifacts --epochs 15 --batch_size 8 --seed 42 --patients-file results/repro/fold_015/train_patients.json

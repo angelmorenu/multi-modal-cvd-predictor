@@ -124,9 +124,86 @@ def make_dataloader(tab_X, tab_y, ecg, batch_size: int, shuffle: bool, ecg_len: 
     return DataLoader(ds, batch_size=batch_size, shuffle=shuffle, drop_last=False)
 
 # -----------------------
+# Loss Functions
+# -----------------------
+class FocalLoss(nn.Module):
+    """Focal Loss for addressing class imbalance.
+    
+    FL(p_t) = -alpha * (1 - p_t)^gamma * log(p_t)
+    where p_t is the model's estimated probability for the ground truth class.
+    """
+    def __init__(self, gamma=2.0, alpha=None, reduction='mean'):
+        super().__init__()
+        self.gamma = gamma
+        self.alpha = alpha
+        self.reduction = reduction
+
+    def forward(self, logits, targets):
+        """
+        Args:
+            logits: (B, C) logits from model
+            targets: (B,) integer class labels
+        Returns:
+            loss scalar
+        """
+        p = torch.softmax(logits, dim=-1)
+        p_t = p.gather(-1, targets.unsqueeze(-1)).squeeze(-1)
+        focal_weight = (1 - p_t) ** self.gamma
+        ce = nn.functional.cross_entropy(logits, targets, reduction='none')
+        loss = focal_weight * ce
+        if self.alpha is not None:
+            # Apply class weighting
+            alpha_t = self.alpha.gather(0, targets)
+            loss = alpha_t * loss
+        if self.reduction == 'mean':
+            return loss.mean()
+        elif self.reduction == 'sum':
+            return loss.sum()
+        else:
+            return loss
+
+# -----------------------
+# Data Augmentation
+# -----------------------
+def augment_ecg(ecg_batch, prob=0.5):
+    """Apply light ECG augmentation during training.
+    
+    Args:
+        ecg_batch: (B, 1, T) tensor
+        prob: probability of applying augmentation to each sample
+    
+    Returns:
+        augmented_batch: (B, 1, T) tensor
+    """
+    if np.random.rand() > prob:
+        return ecg_batch
+    
+    B, C, T = ecg_batch.shape
+    aug_batch = ecg_batch.clone()
+    
+    for b in range(B):
+        aug_type = np.random.choice(['noise', 'scale', 'jitter'])
+        
+        if aug_type == 'noise':
+            # Add small Gaussian noise
+            noise = torch.randn_like(aug_batch[b]) * 0.05
+            aug_batch[b] = torch.clamp(aug_batch[b] + noise, -1.0, 1.0)
+        elif aug_type == 'scale':
+            # Random amplitude scaling
+            scale = np.random.uniform(0.8, 1.2)
+            aug_batch[b] = aug_batch[b] * scale
+        elif aug_type == 'jitter':
+            # Time-shift by small amount
+            shift = np.random.randint(-10, 11)
+            if shift != 0:
+                aug_batch[b] = torch.roll(aug_batch[b], shifts=shift, dims=-1)
+    
+    return aug_batch
+
+# -----------------------
 # Training / Eval
 # -----------------------
-def run_one_epoch(model, loader, criterion, optimizer=None, device: torch.device | str = "cpu"):
+def run_one_epoch(model, loader, criterion, optimizer=None, device: torch.device | str = "cpu", augment_ecg_flag=False):
     is_train = optimizer is not None
     model.train(is_train)
     total_loss, total_correct, total = 0.0, 0, 0
@@ -135,6 +212,10 @@ def run_one_epoch(model, loader, criterion, optimizer=None, device: torch.device
         tab_x = tab_x.to(device)
         ecg_x = ecg_x.to(device)
         y     = y.to(device)
+
+        # Apply ECG augmentation during training
+        if is_train and augment_ecg_flag:
+            ecg_x = augment_ecg(ecg_x, prob=0.5)
 
         logits = model(tab_x, ecg_x)  # (B, 2)
         loss = criterion(logits, y)
@@ -156,7 +237,7 @@ def run_one_epoch(model, loader, criterion, optimizer=None, device: torch.device
     return avg_loss, acc
 
 # -----------------------
-# Main
+# Main entry point and argument parsing
 # -----------------------
 def main():
     p = argparse.ArgumentParser(description="Train ECG CNN (Week 4) and Fusion (Week 5).")
@@ -169,6 +250,12 @@ def main():
     p.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     p.add_argument("--ecg_only", action="store_true", help="Week 4: train ECG CNN + a small head (tabular zeros).")
     p.add_argument("--ecg_len", type=int, default=2000, help="Target ECG length (pad/crop).")
+    p.add_argument("--patients-file", default=None, help="Optional JSON file with list of patient_ids to use for this run (patient-level subsampling).")
+    p.add_argument("--loss", choices=["ce", "weighted_ce", "focal"], default="weighted_ce", help="Loss function: ce (cross-entropy), weighted_ce (class-weighted), or focal (focal loss).")
+    p.add_argument("--focal_gamma", type=float, default=2.0, help="Gamma parameter for focal loss (higher = focus on hard negatives).")
+    p.add_argument("--dropout", type=float, default=0.3, help="Dropout rate in model layers.")
+    p.add_argument("--weight_decay", type=float, default=1e-4, help="L2 regularization weight.")
+    p.add_argument("--augment_ecg", action="store_true", help="Enable ECG data augmentation (noise, jitter, scaling).")
     args = p.parse_args()
 
     set_seed(args.seed)
@@ -180,6 +267,29 @@ def main():
 
     ecg_tr = load_ecg_split(args.processed_dir, "train")  # (N, T)
     ecg_va = load_ecg_split(args.processed_dir, "val")
+
+    # If a patients-file is provided, subset arrays using the patient manifest.
+    if args.patients_file is not None:
+        import json as _json
+        mf = os.path.join(args.processed_dir, "manifest.csv")
+        if not os.path.exists(mf):
+            print(f"WARNING: manifest not found at {mf}; --patients-file will be ignored.")
+        else:
+            # load manifest and build mapping patient_id -> row index (assumes manifest rows align with array ordering)
+            import pandas as _pd
+            mdf = _pd.read_csv(mf)
+            pid_to_idx = {pid: idx for idx, pid in enumerate(mdf["patient_id"].tolist())}
+            with open(args.patients_file) as fh:
+                sel_pids = _json.load(fh)
+            sel_idxs = [pid_to_idx[p] for p in sel_pids if p in pid_to_idx]
+            sel_idxs = sorted(set(sel_idxs))
+            if tab_tr_X is not None:
+                tab_tr_X = tab_tr_X[sel_idxs]
+                if tab_tr_y is not None:
+                    tab_tr_y = tab_tr_y[sel_idxs]
+            if ecg_tr is not None:
+                ecg_tr = ecg_tr[sel_idxs]
+            # For val we keep as-is (validation is created by run_nested_cv via train/val split of patients)
 
     # Optional: pad/crop ECG to ecg_len
     def fit_len(ecg):
@@ -204,9 +314,32 @@ def main():
     device = torch.device(args.device)
     model.to(device)
 
-    # Loss/opt
-    criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr)
+    # --- Build loss function
+    if args.loss == "weighted_ce":
+        # Compute class weights from training set
+        if tab_tr_y is not None:
+            unique, counts = np.unique(tab_tr_y, return_counts=True)
+            class_weights = 1.0 / (counts + 1e-6)
+            class_weights = class_weights / class_weights.sum() * 2  # normalize to ~2
+            class_weights_t = torch.tensor(class_weights, dtype=torch.float32, device=device)
+            criterion = nn.CrossEntropyLoss(weight=class_weights_t)
+        else:
+            criterion = nn.CrossEntropyLoss()
+    elif args.loss == "focal":
+        # Compute class weights for focal loss
+        if tab_tr_y is not None:
+            unique, counts = np.unique(tab_tr_y, return_counts=True)
+            class_weights = 1.0 / (counts + 1e-6)
+            class_weights = class_weights / class_weights.sum() * 2
+            class_weights_t = torch.tensor(class_weights, dtype=torch.float32, device=device)
+        else:
+            class_weights_t = None
+        criterion = FocalLoss(gamma=args.focal_gamma, alpha=class_weights_t, reduction='mean')
+    else:  # ce
+        criterion = nn.CrossEntropyLoss()
+
+    # Loss/opt with weight decay for L2 regularization
+    optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
     # --- Dataloaders
     train_loader = make_dataloader(tab_tr_X, tab_tr_y, ecg_tr, batch_size=args.batch_size, shuffle=True)
@@ -215,8 +348,8 @@ def main():
     # --- Training loop
     best_val = math.inf
     for epoch in range(1, args.epochs + 1):
-        tr_loss, tr_acc = run_one_epoch(model, train_loader, criterion, optimizer, device)
-        va_loss, va_acc = run_one_epoch(model, val_loader, criterion, optimizer=None, device=device)
+        tr_loss, tr_acc = run_one_epoch(model, train_loader, criterion, optimizer, device, augment_ecg_flag=args.augment_ecg)
+        va_loss, va_acc = run_one_epoch(model, val_loader, criterion, optimizer=None, device=device, augment_ecg_flag=False)
 
         print(f"[Epoch {epoch:02d}] "
               f"train_loss={tr_loss:.4f} acc={tr_acc:.3f} | "
@@ -225,7 +358,7 @@ def main():
         # Save best (by val_loss)
         if va_loss < best_val:
             best_val = va_loss
-            ckpt = os.path.join(args.artifacts_dir, "model.pt" if not args.ecg_only else "model_ecg.pt")
+            ckpt = os.path.join(args.artifacts_dir, "model_ecg.pt" if args.ecg_only else "model.pt")
             save_checkpoint(model, ckpt)
             print(f"  Saved checkpoint: {ckpt}")
 

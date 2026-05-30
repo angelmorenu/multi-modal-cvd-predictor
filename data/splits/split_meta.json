@@ -1,0 +1,8 @@
+{
+  "n_patients": 32,
+  "counts": {
+    "test": 6,
+    "train": 23,
+    "val": 3
+  }
+}

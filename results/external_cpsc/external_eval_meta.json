@@ -1,0 +1,28 @@
+{
+  "timestamp": 1780107194.4411001,
+  "signals": "data/external/external_ecg_cpsc_signals.npy",
+  "labels": "data/external/external_ecg_cpsc_labels.npy",
+  "checkpoint": "artifacts/model.pt",
+  "device": "cpu",
+  "tab_dim": 12,
+  "ecg_len": 2000,
+  "metrics": {
+    "accuracy": 0.8665115602733751,
+    "pr_auc": 0.8570010290726556,
+    "brier": 0.13425758481025696,
+    "confusion_matrix": [
+      [
+        0,
+        918
+      ],
+      [
+        0,
+        5959
+      ]
+    ],
+    "n_samples": 6877,
+    "n_positive": 5959,
+    "n_negative": 918,
+    "roc_auc": 0.44789650118218866
+  }
+}

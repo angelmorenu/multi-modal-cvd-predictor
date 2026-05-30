@@ -1,0 +1,37 @@
+{
+  "timestamp": 1780089678.133564,
+  "proc_dir": "data/processed",
+  "art_dir": "artifacts",
+  "ckpt": "artifacts/model.pt",
+  "device": "cpu",
+  "n_samples": 21,
+  "metrics": {
+    "accuracy": "0.47619047619047616",
+    "roc_auc": "0.4272727272727273",
+    "pr_auc": "0.5394304388422035",
+    "brier": "0.32485055923461914",
+    "preds": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  }
+}

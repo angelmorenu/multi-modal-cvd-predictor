@@ -1,0 +1,14 @@
+.git
+.github
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Large local data and generated artifacts are mounted or generated at runtime.
+data/
+results/
+figures/
+Notebooks/*.ipynb_checkpoints

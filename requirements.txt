@@ -1,0 +1,46 @@
+# Best-effort pinned requirements for the repo runtime.
+# Exact versions are pinned where known from the current environment;
+# a few optional packages are pinned to widely compatible versions.
+
+# Core numerics / data
+numpy==1.26.4
+pandas==2.2.3
+scipy==1.17.1
+scikit-learn==1.8.0
+joblib==1.5.3
+
+# Deep learning
+torch==2.2.2
+torchvision==0.17.2
+torchaudio==2.2.2
+tqdm==4.67.3
+
+# Visualization / explainability / UI
+matplotlib==3.10.9
+seaborn==0.13.2
+plotly==5.24.1
+shap==0.46.0
+streamlit==1.41.1
+
+# Signal / ECG tooling
+wfdb==4.3.1
+neurokit2==0.2.11
+
+# Config / HTTP
+PyYAML==6.0.2
+requests==2.34.2
+
+# Notebook / interactive development
+ipykernel==6.29.5
+jupyterlab==4.3.0
+notebook==7.3.2
+
+# Optional project dependencies from environment manifests
+captum==0.8.0
+torchsummary==1.5.1
+gradio==5.16.0
+scikit-optimize==0.10.2
+pycm==4.3
+
+# Helpful for local / CI inference and logging
+tensorboard==2.18.0

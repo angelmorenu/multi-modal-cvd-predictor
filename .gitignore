@@ -9,3 +9,6 @@ artifacts/
 results/*.npy
 data/processed/*
 data/ptbxl_records/*
+# Ignore large external data files
+/data/external/cpsc_2018.zip
+/data/external/external_ecg_cpsc_signals.npy

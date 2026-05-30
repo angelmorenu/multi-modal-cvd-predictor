@@ -19,15 +19,24 @@ Cardiovascular disease (CVD) remains the leading global cause of death, accounti
 
 The system demonstrates how **multi-modal fusion** can improve CVD risk discrimination and provides **clinically actionable explanations** via SHAP and saliency-based interpretability. End-to-end reproducibility is achieved through documented preprocessing, model training, calibration, and edge-deployable inference.
 
-**Key Achievements:**
-- ✅ Robust multi-modal preprocessing pipeline for heterogeneous data
-- ✅ Modality-specific encoders (tabular MLP + 1D-CNN for ECG) with mid-level fusion
-- ✅ Post-hoc Platt scaling for well-calibrated probability estimates
-- ✅ Layered interpretability (SHAP, ECG saliency, with fallback RandomForest)
-- ✅ Interactive Streamlit UI with audit logging for clinical deployment
-- ✅ Edge-deployable lightweight model (<500K parameters, <5MB)
-- ✅ **Comprehensive IEEE-formatted research report (11 pages, Deliverable 4)**
-- ✅ Complete reproducible system with environment files and open-source code
+**At a Glance:**
+- Multi-modal CVD risk prediction from tabular, admissions, and ECG data
+- Reproducible evaluation with tabular baselines, robust CV, and external ECG prep/eval
+- Experiment scaffold for stronger ECG models, class-imbalance handling, and uncertainty estimates
+- Documentation package with model card, dataset datasheets, and recommendations report
+
+**Start Here:**
+- Run `make dry-run` to verify shapes and artifact loading
+- Run `make test` to execute the smoke tests
+- Run `make docker-build` and `make docker-run` to launch the app in a container
+- Open `MODEL_CARD.md`, `data/dataset_datasheets.md`, and `reports/recommendations.md` for the docs trail
+
+**Quick Links:**
+- [Pinned Dependencies](requirements.txt)
+- [Experiment Notebook](Notebooks/robust_evaluation.ipynb)
+- [CI Workflow](.github/workflows/ci.yml)
+- [External ECG Prep & Eval](scripts/prepare_external_ecg.py) / [Download Targets](scripts/download_datasets.py)
+- [Smoke + Experiment Tests](tests/)
 
 ---
 
@@ -80,6 +89,20 @@ The comprehensive IEEE-formatted technical report (`Report/Project Deliverables 
 - **Hyperparameters Table** – Learning rates, dropout rates, layer dimensions
 - **Performance Summary Table** – Metrics for all model variants
 
+## 🧩 Added Files
+
+The following files were added during the robustness and external-validation work:
+
+- `scripts/run_tabular_baselines.py`
+- `scripts/robust_eval.py`
+- `scripts/prepare_external_ecg.py`
+- `scripts/eval_external_ecg.py`
+- `scripts/download_datasets.py` (updated with PTBDB/CPSC and `--all-external`)
+- `Notebooks/robust_evaluation.ipynb`
+- `data/README_datasets.md`
+
+These additions support repeat-aware evaluation, DeLong comparison, external ECG preparation, and external dataset downloads for PTBDB/CPSC.
+
 ---
 
 ## 📦 GitHub Repository
@@ -102,6 +125,77 @@ cd multi-modal-cvd-predictor
 | **Hospital Admissions (Kaggle)** | Clinical visit and diagnostic records | ~50K records | [https://www.kaggle.com/datasets/ashishsahani/hospital-admissions-data](https://www.kaggle.com/datasets/ashishsahani/hospital-admissions-data) |
 | **PTB-XL ECG Database (Kaggle)** | 12-lead ECG signals and annotations | 21,837 recordings | [https://www.kaggle.com/datasets/khyeh0719/ptb-xl-dataset-reformatted](https://www.kaggle.com/datasets/khyeh0719/ptb-xl-dataset-reformatted) |
 
+### External Validation Plan
+
+To make the project more legitimate and clinically credible, add external ECG validation on a dataset that was **not** used during training.
+
+Recommended options:
+
+- **PTBDB**: useful for transfer learning and holdout validation.
+- **CPSC / challenge ECG sets**: useful for cross-site generalization.
+
+Preparation workflow:
+
+1. Download or extract the external ECG dataset locally.
+2. Record provenance details in `data/README_datasets.md`.
+3. Standardize the dataset with `scripts/prepare_external_ecg.py`.
+4. Evaluate ECG-only and fusion models on the external set.
+
+Example:
+
+```bash
+.venv/bin/python scripts/prepare_external_ecg.py \
+  --input-root /path/to/ptbdb_or_cpsc \
+  --dataset-name ptbdb \
+  --labels-csv /path/to/labels.csv \
+  --ecg-len 2000 \
+  --out-dir data/external
+```
+
+Download targets supported by the repo:
+
+```bash
+# PhysioNet PTB Diagnostic ECG Database
+.venv/bin/python scripts/download_datasets.py --ptbdb
+
+# PhysioNet CPSC 2018 ECG dataset
+.venv/bin/python scripts/download_datasets.py --cpsc
+```
+
+External evaluation example:
+
+```bash
+.venv/bin/python scripts/eval_external_ecg.py \
+  --signals data/external/external_ecg_ptbdb_signals.npy \
+  --labels data/external/external_ecg_ptbdb_labels.npy \
+  --artifacts-dir artifacts \
+  --checkpoint model.pt \
+  --out-dir results/external/ptbdb
+```
+
+Full PTBDB/CPSC external-validation pipeline:
+
+```bash
+# 1) Download external ECG source(s)
+.venv/bin/python scripts/download_datasets.py --all-external
+
+# 2) Standardize the raw ECG files into .npy arrays + manifest
+.venv/bin/python scripts/prepare_external_ecg.py \
+  --input-root data/raw/ptbdb \
+  --dataset-name ptbdb \
+  --labels-csv data/raw/ptbdb_labels.csv \
+  --ecg-len 2000 \
+  --out-dir data/external
+
+# 3) Evaluate the model on the prepared external ECG set
+.venv/bin/python scripts/eval_external_ecg.py \
+  --signals data/external/external_ecg_ptbdb_signals.npy \
+  --labels data/external/external_ecg_ptbdb_labels.npy \
+  --artifacts-dir artifacts \
+  --checkpoint model.pt \
+  --out-dir results/external/ptbdb
+```
+
 ---
 
 ## 🏗️ System Architecture
@@ -123,6 +217,20 @@ The system implements a **multi-modal fusion pipeline** combining:
 ---
 
 ## ⚙️ Installation and Environment Setup
+
+If you prefer pip over conda, the repo now includes a pinned `requirements.txt` and a `Dockerfile` for a containerized setup.
+
+### Pip / Docker quick start
+```bash
+python -m pip install -r requirements.txt
+make dry-run
+```
+
+Or build and run the UI in Docker:
+```bash
+docker build -t multi-modal-cvd-predictor .
+docker run --rm -p 8501:8501 multi-modal-cvd-predictor
+```
 
 Install with conda (choose the appropriate platform file):
 
@@ -223,6 +331,7 @@ pdflatex -interaction=nonstopmode "Project Deliverables 4.tex"
 ├── 📂 Notebooks/
 │   ├── Setup.ipynb                                 # EDA and data preprocessing
 │   └── train_eval.ipynb                            # Model training and evaluation
+
 │
 ├── 📂 src/
 │   ├── preprocess.py                               # Data preprocessing utilities
@@ -250,6 +359,8 @@ pdflatex -interaction=nonstopmode "Project Deliverables 4.tex"
 │   ├── plot_calibration.py                         # Plot calibration curves
 │   ├── plot_confusion.py                           # Plot confusion matrices
 │   └── verify_preprocessing.py                     # Validate preprocessing
+
+
 │
 ├── 📂 figures/
 │   ├── confusion_matrix.png                        # Confusion matrix (fusion model)
